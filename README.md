@@ -41,7 +41,7 @@
 
 如果想运行本项目，首先确保已安装 Node.js(>=18)，JDK，Android Studio，并确保配置可以运行安卓原生项目，创建 Android 虚拟设备或真机调试。
 
-按照 https://reactnative.dev/docs/environment-setup 安装 React Native CLI。
+按照文档 [React Native](https://reactnative.dev/docs/environment-setup) 安装 React Native CLI。
 
 ```
 # Clone this project
