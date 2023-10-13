@@ -37,6 +37,33 @@
 - 简易支持用户注册登陆
 - 可自定义用户名与头像等用户信息
 
+## How To Run
+
+如果想运行本项目，首先确保已安装 Node.js(>=18)，JDK，Android Studio，并确保配置可以运行安卓原生项目，创建 Android 虚拟设备或真机调试。
+
+按照 https://reactnative.dev/docs/environment-setup 安装 React Native CLI。
+
+```
+# Clone this project
+$ git clone https://github.com/raxskle/MyChat-Client.git
+
+# Access
+$ cd MyChat-Client
+
+# Install dependencies
+$ npm install
+
+# Run the Metro
+$ npm start
+
+Create another command line terminal
+
+# Start your application
+$ npm run android
+
+That's it!
+```
+
 ## License
 
 This project is under license from [MIT](LICENSE.md).
