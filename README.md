@@ -2,13 +2,15 @@
 
 <p align="center">
 
-<img src="https://img.shields.io/badge/language-JavaScript-F1E05A"/>
+<img src="https://img.shields.io/badge/language-TypeScript-8A2BE2"/>
 
-<img alt="License" src="https://img.shields.io/github/license/raxskle/MyChat-Server?color=64EDAC">
+<img src="https://img.shields.io/badge/React-18.2.0-087EA4"/>
 
-<img alt="last-commit" src="https://img.shields.io/github/last-commit/raxskle/MyChat-Server/main?color=FEFEFE"/>
+<img alt="License" src="https://img.shields.io/github/license/raxskle/MyChat-Client?color=64EDAC">
 
-<img alt="repo-size" src="https://img.shields.io/github/repo-size/raxskle/MyChat-Server?color=blue"/>
+<img alt="last-commit" src="https://img.shields.io/github/last-commit/raxskle/MyChat-Client/main?color=FEFEFE"/>
+
+<img alt="repo-size" src="https://img.shields.io/github/repo-size/raxskle/MyChat-Client?color=blue"/>
 
 </p>
 
