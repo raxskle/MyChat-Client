@@ -1,5 +1,9 @@
 import React from 'react';
 
+// redux
+import {Provider, useSelector} from 'react-redux';
+import {RootState, store} from './src/store/index';
+
 import {
   SafeAreaView,
   View,
@@ -27,6 +31,7 @@ import ChatListPage from './src/page/ChatListPage/ChatListPage';
 import FriendPage from './src/page/FriendListPage/FriendListPage';
 import SharePage from './src/page/SharePage/SharePage';
 import UserPage from './src/page/UserPage/UserPage';
+import ChatPage from './src/page/ChatPage/ChatPage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -93,7 +98,13 @@ const renderTabBarIcon: any = (route: RouteProp<ParamListBase, string>) => {
   };
 };
 
-const Home = () => {
+const Home = ({navigation}: {navigation: any}) => {
+  const user = useSelector((state: RootState) => state.user.user);
+
+  if (user.id === '') {
+    navigation.navigate('Login');
+  }
+
   return (
     <Tab.Navigator
       screenOptions={({route}) => {
@@ -130,37 +141,48 @@ function App(): JSX.Element {
   console.log('app lanuch');
 
   return (
-    <SafeAreaView style={styles.page}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerStyle: {backgroundColor: '#f3f3f3'},
-            headerTitleAlign: 'center',
-            headerTintColor: '#000',
-            headerTitleStyle: {
-              fontWeight: 'normal',
-            },
-            headerRight: HeaderButton,
-            headerLeft: HeaderBland,
-          }}>
-          <Stack.Screen
-            name="Login"
-            component={LoginPage}
-            options={{title: 'Login', headerRight: undefined}}
-          />
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{
-              title: '微信',
-              headerShown: false,
-            }}
-            initialParams={{num: 0}}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
+    <Provider store={store}>
+      <SafeAreaView style={styles.page}>
+        <StatusBar barStyle={'dark-content'} backgroundColor={'#f3f3f3'} />
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: {backgroundColor: '#f3f3f3'},
+              headerTitleAlign: 'center',
+              headerTintColor: '#000',
+              headerTitleStyle: {
+                fontWeight: 'normal',
+              },
+              headerRight: HeaderButton,
+              headerLeft: HeaderBland,
+            }}>
+            <Stack.Screen
+              name="Login"
+              component={LoginPage}
+              options={{title: '使用账号登陆', headerRight: undefined}}
+            />
+            <Stack.Screen
+              name="Home"
+              component={Home}
+              options={{
+                title: '微信',
+                headerShown: false,
+              }}
+              initialParams={{num: 0}}
+            />
+            <Stack.Screen
+              name="Chat"
+              component={ChatPage}
+              options={{
+                title: 'Chat',
+                headerRight: undefined,
+                headerLeft: undefined,
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </Provider>
   );
 }
 

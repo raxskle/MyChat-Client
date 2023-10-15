@@ -1,21 +1,16 @@
 import React from 'react';
 
-import {ScrollView, StyleSheet, Text, View, Button} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
 import {Dimensions} from 'react-native';
+import {NavigationProps} from '../../utils/types';
 
-function SharePage({navigation}: {route: any; navigation: any}): JSX.Element {
+function SharePage({}: NavigationProps): JSX.Element {
   const window = Dimensions.get('window');
 
   return (
     <View style={styles.container}>
       <Text style={styles.highlight}>ChatList Page</Text>
-      <Button
-        title="logout"
-        onPress={() => {
-          navigation.goBack();
-        }}
-      />
 
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"

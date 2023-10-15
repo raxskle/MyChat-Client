@@ -2,16 +2,6 @@
 
 基于跨端开发的 mini 微信
 
-## 技术栈
-
-移动客户端使用 React Native 跨端开发，使用技术以及相关库：React Native + Typescript + socket.io
-
-服务端使用 node.js 进行开发，使用技术以及相关库：Express + MySQL + Socket.io
-
-即时全双工通信使用 socket.io 库接口
-
-Android 移动端推荐网络请求使用 https 进行安全请求，不能使用 http 等明文传输，为了方便，使用腾讯云部署服务端。
-
 ## 实现模块
 
 - 注册登陆模块
