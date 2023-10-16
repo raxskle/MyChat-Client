@@ -3,11 +3,17 @@ import React from 'react';
 import {View, StyleSheet, Text, Image} from 'react-native';
 
 import {Dimensions} from 'react-native';
+import {ChatType} from '../../../store/userSlice';
 const window = Dimensions.get('window');
 
-const sample = 'Y😄';
+// const sample = 'Y😄';
 
-function WhiteChat(): JSX.Element {
+interface WhiteChatProps {
+  chat: ChatType;
+  avator: string;
+}
+
+function WhiteChat({chat}: WhiteChatProps): JSX.Element {
   return (
     <View style={styles.chat}>
       <Image
@@ -16,7 +22,7 @@ function WhiteChat(): JSX.Element {
       />
 
       <View style={styles.bubble}>
-        <Text style={styles.text}>{sample}</Text>
+        <Text style={styles.text}>{chat.content}</Text>
         <View style={styles.triangle} />
       </View>
     </View>

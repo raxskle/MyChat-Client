@@ -3,33 +3,39 @@ import React from 'react';
 import {View, StyleSheet, Text, Image} from 'react-native';
 
 import {Dimensions} from 'react-native';
+import {ChatType} from '../../../store/userSlice';
 const window = Dimensions.get('window');
 
-const sample = `You see the world is out there 
-waiting for me
-That's why I wanna be 
-as free as can be!
+// const sample = `You see the world is out there
+// waiting for me
+// That's why I wanna be
+// as free as can be!
 
-I know that you've been good 
-and You've been sweet, 
-so don't put up a fight,
-Just let it be! 
+// I know that you've been good
+// and You've been sweet,
+// so don't put up a fight,
+// Just let it be!
 
- well, I hope one day,
-While I'm missing you.  
-And so will you 
-be Thinking of me!  
+//  well, I hope one day,
+// While I'm missing you.
+// And so will you
+// be Thinking of me!
 
-Then we can be together,
-To laugh about the past, 
-but the love is Still there 
-for you and me`;
+// Then we can be together,
+// To laugh about the past,
+// but the love is Still there
+// for you and me`;
 
-function GreenChat(): JSX.Element {
+interface GreenChatProps {
+  chat: ChatType;
+  avator: string;
+}
+
+function GreenChat({chat}: GreenChatProps): JSX.Element {
   return (
     <View style={styles.chat}>
       <View style={styles.bubble}>
-        <Text style={styles.text}>{sample}</Text>
+        <Text style={styles.text}>{chat.content}</Text>
         <View style={styles.triangle} />
       </View>
 

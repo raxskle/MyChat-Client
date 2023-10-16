@@ -32,6 +32,8 @@ import FriendPage from './src/page/FriendListPage/FriendListPage';
 import SharePage from './src/page/SharePage/SharePage';
 import UserPage from './src/page/UserPage/UserPage';
 import ChatPage from './src/page/ChatPage/ChatPage';
+import FriendProfilePage from './src/page/FriendProfilePage/FriendProfilePage';
+import AddFriendPage from './src/page/AddFriendPage/AddFriendPage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -177,6 +179,29 @@ function App(): JSX.Element {
                 title: 'Chat',
                 headerRight: undefined,
                 headerLeft: undefined,
+              }}
+            />
+
+            <Stack.Screen
+              name="FriendProfile"
+              component={FriendProfilePage}
+              options={{
+                title: '',
+                headerRight: undefined,
+                headerLeft: undefined,
+                headerStyle: {backgroundColor: 'white'},
+                headerTransparent: true,
+              }}
+            />
+
+            <Stack.Screen
+              name="AddFriend"
+              component={AddFriendPage}
+              options={{
+                title: '添加朋友',
+                headerRight: undefined,
+                headerLeft: undefined,
+                headerTransparent: true,
               }}
             />
           </Stack.Navigator>

@@ -3,13 +3,25 @@ import React from 'react';
 import {View, StyleSheet, Text, Image, Pressable} from 'react-native';
 
 import {Dimensions} from 'react-native';
+import {NavigationProps} from '../../../utils/types';
+import {ChatType} from '../../../store/userSlice';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../store';
 const window = Dimensions.get('window');
 
-function ChatItem({navigation}: {navigation: any}): JSX.Element {
+interface ChatItemProps extends NavigationProps {
+  chat: ChatType[];
+  friendId: string;
+}
+
+function ChatItem({navigation, friendId, chat}: ChatItemProps): JSX.Element {
+  const AllFriends = useSelector((state: RootState) => state.friend.data);
+  const info = AllFriends.find(item => item.id === friendId);
+
   return (
     <Pressable
       onPress={() => {
-        navigation.navigate('Chat');
+        navigation.navigate('Chat', {friendId, chat});
       }}>
       <View style={styles.item}>
         <Image
@@ -18,10 +30,16 @@ function ChatItem({navigation}: {navigation: any}): JSX.Element {
         />
         <View style={styles.main}>
           <View style={styles.data}>
-            <Text style={styles.name}>另一个用户</Text>
-            <Text style={styles.msg}>hello!</Text>
+            <Text style={styles.name}>{info?.name}</Text>
+            <Text style={styles.msg}>
+              {chat.length > 0
+                ? chat[chat.length - 1].content
+                : `你已添加了${info?.name},现在可以开始聊天了!`}
+            </Text>
           </View>
-          <Text style={styles.time}>02:18</Text>
+          <Text style={styles.time}>
+            {chat.length > 0 ? chat[chat.length - 1].content : ''}
+          </Text>
         </View>
       </View>
     </Pressable>

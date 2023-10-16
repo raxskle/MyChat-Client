@@ -8,12 +8,15 @@ import {
   View,
   TextInput,
   Image,
+  Alert,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 
 import {Dimensions} from 'react-native';
-import {getUserInfo} from '../../http';
+import {getFriendInfo, getUserInfo} from '../../http';
 import {setUser} from '../../store/userSlice';
+import {setFriends} from '../../store/friendSlice';
+import {compare} from 'pinyin';
 
 const window = Dimensions.get('window');
 
@@ -61,11 +64,23 @@ function LoginPage({navigation}: {navigation: any}): JSX.Element {
         onPress={async () => {
           if (id !== '' && password !== '') {
             const user = await getUserInfo(id, password);
-            if (user) {
-              dispatch(setUser({user}));
-              console.log('登录, user:', user);
-              navigation.navigate('Home');
+            if (!user) {
+              Alert.alert('登陆失败');
+              return;
             }
+            dispatch(setUser({user}));
+
+            const friendInfoList = await getFriendInfo(user.friends);
+            dispatch(
+              setFriends({
+                friends: [...friendInfoList].sort((a, b) =>
+                  compare(a.name, b.name),
+                ),
+              }),
+            );
+
+            // 跳转进入
+            navigation.navigate('Home');
           }
         }}>
         注册/登录

@@ -8,6 +8,7 @@ import WhiteChat from './WhiteChat/WhiteChat';
 import {RootState} from '../../store';
 import {useSelector} from 'react-redux';
 import {NavigationProps} from '../../utils/types';
+import {ChatType} from '../../store/userSlice';
 
 const window = Dimensions.get('window');
 
@@ -15,21 +16,39 @@ const voiceIcon = require('../../assets/ChatPage/voice2.png');
 const faceIcon = require('../../assets/ChatPage/smile.png');
 const moreIcon = require('../../assets/ChatPage/more.png');
 
-function ChatPage({navigation}: NavigationProps): JSX.Element {
-  const [text, setText] = useState('');
+interface RouteParams {
+  chat: ChatType[];
+  friendId: string;
+}
 
+function ChatPage({route, navigation}: NavigationProps): JSX.Element {
+  const {friendId, chat}: RouteParams = route.params;
+
+  // 自己和对方的信息
+  const friendInfo = useSelector((state: RootState) => {
+    return state.friend.data.find(item => item.id === friendId);
+  });
   const user = useSelector((state: RootState) => state.user.user);
-  if (user.id === '') {
+  if (user.id === '' || !friendInfo) {
     navigation.navigate('Login');
   }
 
+  // 输入的信息
+  const [text, setText] = useState('');
+
+  useEffect(() => {
+    // 设置标题
+    navigation.setOptions({
+      title: friendInfo?.name || '微信聊天',
+    });
+  }, [friendInfo, navigation]);
+
+  // 滚动
   const scrollViewRef = useRef<ScrollView>(null);
 
   useEffect(() => {
     scrollViewRef.current?.scrollToEnd({animated: false});
-
-    console.log('user: ', user);
-  }, [user]);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -37,12 +56,14 @@ function ChatPage({navigation}: NavigationProps): JSX.Element {
         ref={scrollViewRef}
         contentInsetAdjustmentBehavior="automatic"
         style={[styles.scrollview]}>
-        <GreenChat />
-        <WhiteChat />
-        <GreenChat />
-        <WhiteChat />
-        <GreenChat />
-        <WhiteChat />
+        {chat.map(item => {
+          if (item.userid === user.id) {
+            // 自己的消息
+            return <GreenChat key={item.time} chat={item} avator={''} />;
+          } else if (item.userid === friendId) {
+            return <WhiteChat key={item.time} chat={item} avator={''} />;
+          }
+        })}
         <View style={styles.gap} />
       </ScrollView>
 
@@ -73,7 +94,7 @@ const styles = StyleSheet.create({
     marginVertical: 0,
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     flex: 1,
   },
@@ -94,10 +115,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
     borderTopColor: '#c0c0c0',
     borderTopWidth: 0.5,
+    // height: Math.max(window.width * 0.07 + 15, 45 + window.width * 0.02),
   },
   leftBtn: {
     width: window.width * 0.07,
     height: window.width * 0.07,
+    margin: 0,
     marginLeft: window.width * 0.02,
     marginRight: 0,
   },

@@ -5,12 +5,18 @@
 // 当修改数据时（比如增加聊天记录或者修改用户信息），携带修改数据向后端请求，响应user信息进行更新user
 import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-interface User {
+export interface ChatType {
+  time: string;
+  userid: string;
+  content: string;
+}
+
+export interface User {
   _id: string;
   id: string;
   name: string;
   friends: string[];
-  chats?: any[];
+  chats?: Record<string, ChatType[]>;
 }
 
 const initialUser: {user: User} = {
@@ -38,9 +44,21 @@ export const userSlice = createSlice({
     ) => {
       console.log(state, action.payload);
     },
+    // 增加一个聊天信息
+    updateChatByOne: (
+      state,
+      action: PayloadAction<{friendId: string; chat: ChatType}>,
+    ) => {
+      const {chat, friendId} = action.payload;
+      if (state.user.chats) {
+        state.user.chats[friendId].push(chat);
+      } else {
+        state.user.chats = {[friendId]: [chat]};
+      }
+    },
   },
 });
 
 //
-export const {setUser, changeUserName} = userSlice.actions;
+export const {setUser, changeUserName, updateChatByOne} = userSlice.actions;
 export default userSlice.reducer;

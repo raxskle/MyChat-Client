@@ -1,37 +1,45 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
-
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import type {RootState} from '../../store/index';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
 import {Dimensions} from 'react-native';
 import FriendItem from './FriendItem/FriendItem';
 import {getCode} from '../../utils/getCode';
 import {compare} from 'pinyin';
+import {getFriendInfo} from '../../http';
+import {NavigationProps} from '../../utils/types';
+import {FriendInfo, setFriends} from '../../store/friendSlice';
 
 const window = Dimensions.get('window');
 
-function FriendPage(): JSX.Element {
+function FriendPage({navigation}: NavigationProps): JSX.Element {
   const toChatPage = () => {
     console.log('press');
   };
 
-  const [friendList, setFriendList] = useState(
-    [
-      'bbB',
-      'bbb',
-      'ccc',
-      'Ccc',
-      'ccc',
-      '冰冰',
-      'ddd',
-      'ddd',
-      'ddd',
-      'zzz',
-      'zzz',
-      '游牧人',
-    ].sort(compare),
-  );
+  const toAddFriendPage = () => {
+    navigation.navigate('AddFriend');
+  };
+
+  const toFriendProfilePage = (friendInfo: FriendInfo) => {
+    navigation.navigate('FriendProfile', friendInfo);
+  };
+
+  const friendsId = useSelector((state: RootState) => state.user.user.friends);
+
+  const friendList = useSelector((state: RootState) => state.friend.data);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getFriendInfo(friendsId).then((res: FriendInfo[]) => {
+      dispatch(
+        setFriends({friends: [...res].sort((a, b) => compare(a.name, b.name))}),
+      );
+    });
+  }, [friendsId, dispatch]);
+
   const codeList = [
     '↑',
     '☆',
@@ -74,38 +82,43 @@ function FriendPage(): JSX.Element {
         }}
         style={styles.container}>
         <FriendItem
-          avator={'https://blog.raxskle.fun/images/mie.png'}
+          avator={require('../../assets/AddFriend.png')}
           name={'新的朋友'}
-          handlePress={toChatPage}
+          avatorColor={'green'}
+          handlePress={toAddFriendPage}
         />
         <FriendItem
-          avator={'https://blog.raxskle.fun/images/mie.png'}
+          avator={require('../../assets/UserInvisible.png')}
           name={'仅聊天的朋友'}
+          avatorColor={'#eab308'}
           handlePress={toChatPage}
         />
         <FriendItem
-          avator={'https://blog.raxskle.fun/images/mie.png'}
+          avator={require('../../assets/Group.png')}
           name={'群聊'}
           handlePress={toChatPage}
         />
         <FriendItem
-          avator={'https://blog.raxskle.fun/images/mie.png'}
+          avator={require('../../assets/Tag.png')}
           name={'标签'}
+          avatorColor={'#016da2'}
           handlePress={toChatPage}
         />
 
         {friendList.map((item, index) => {
           return (
-            <View key={Math.random()}>
+            <View key={item.id}>
               {(index === 0 ||
-                getCode(friendList[index - 1]).toUpperCase() !==
-                  getCode(item).toUpperCase()) && (
-                <Text style={styles.gap}>{getCode(item).toUpperCase()}</Text>
+                getCode(friendList[index - 1].name).toUpperCase() !==
+                  getCode(item.name).toUpperCase()) && (
+                <Text style={styles.gap}>
+                  {getCode(item.name).toUpperCase()}
+                </Text>
               )}
               <FriendItem
-                avator={'https://blog.raxskle.fun/images/mie.png'}
-                name={item}
-                handlePress={toChatPage}
+                avator={{uri: 'https://blog.raxskle.fun/images/mie.png'}}
+                name={item.name}
+                handlePress={() => toFriendProfilePage(item)}
               />
             </View>
           );

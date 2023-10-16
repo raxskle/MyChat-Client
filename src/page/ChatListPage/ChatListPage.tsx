@@ -6,9 +6,13 @@ import {ScrollView, StyleSheet} from 'react-native';
 import {Dimensions} from 'react-native';
 import ChatItem from './ChatItem/ChatItem';
 import {NavigationProps} from '../../utils/types';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../store';
 const window = Dimensions.get('window');
 
 function ChatListPage({navigation}: NavigationProps): JSX.Element {
+  const chats = useSelector((state: RootState) => state.user.user.chats) || {};
+
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
@@ -17,7 +21,16 @@ function ChatListPage({navigation}: NavigationProps): JSX.Element {
         alignItems: 'center',
       }}
       style={styles.container}>
-      <ChatItem navigation={navigation} />
+      {Object.keys(chats).map(id => {
+        return (
+          <ChatItem
+            key={id}
+            navigation={navigation}
+            chat={chats[id]}
+            friendId={id}
+          />
+        );
+      })}
     </ScrollView>
   );
 }

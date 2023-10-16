@@ -1,21 +1,37 @@
 import React from 'react';
 
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  ImageSourcePropType,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 import {Dimensions} from 'react-native';
 const window = Dimensions.get('window');
 
 interface FriendItemProps {
   handlePress: () => void;
-  avator: string;
+  avator: ImageSourcePropType;
   name: string;
+  avatorColor?: string;
 }
 
-function FriendItem({avator, name, handlePress}: FriendItemProps): JSX.Element {
+function FriendItem({
+  avator,
+  name,
+  handlePress,
+  avatorColor,
+}: FriendItemProps): JSX.Element {
   return (
     <Pressable onPress={handlePress}>
       <View style={styles.item}>
-        <Image style={styles.avator} source={{uri: avator}} />
+        <Image
+          style={[styles.avator, {backgroundColor: avatorColor || 'green'}]}
+          source={avator}
+        />
         <View style={styles.main}>
           <Text style={styles.name}>{name}</Text>
         </View>
@@ -40,7 +56,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 6,
-    backgroundColor: 'green',
+
     margin: 8,
     marginLeft: 20,
     marginRight: 20,
