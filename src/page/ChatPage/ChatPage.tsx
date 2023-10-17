@@ -1,6 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
 
-import {ScrollView, StyleSheet, TextInput, View, Image} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+  Image,
+  Text,
+} from 'react-native';
 
 import {Dimensions} from 'react-native';
 import GreenChat from './GreenChat/GreenChat';
@@ -80,7 +87,13 @@ function ChatPage({route, navigation}: NavigationProps): JSX.Element {
           }}
         />
         <Image style={styles.rightBtn} source={faceIcon} />
-        <Image style={styles.rightBtn} source={moreIcon} />
+        {text.length === 0 ? (
+          <Image style={styles.rightBtn} source={moreIcon} />
+        ) : (
+          <View style={styles.sendBtn}>
+            <Text style={styles.sendText}>发送</Text>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -112,7 +125,7 @@ const styles = StyleSheet.create({
     width: window.width,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     backgroundColor: '#f8f8f8',
     borderTopColor: '#c0c0c0',
     borderTopWidth: 0.5,
@@ -133,12 +146,24 @@ const styles = StyleSheet.create({
   },
   inputBox: {
     height: 36,
-    width: window.width * 0.6,
+    flex: 1,
     backgroundColor: 'white',
     margin: window.width * 0.02,
     padding: 0,
     paddingLeft: 8,
     borderRadius: 4,
+  },
+  sendBtn: {
+    backgroundColor: 'green',
+    width: window.width * 0.12,
+    height: window.width * 0.07,
+    marginRight: window.width * 0.02,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+  },
+  sendText: {
+    color: 'white',
   },
 });
 
