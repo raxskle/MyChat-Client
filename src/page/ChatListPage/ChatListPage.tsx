@@ -13,6 +13,8 @@ const window = Dimensions.get('window');
 function ChatListPage({navigation}: NavigationProps): JSX.Element {
   const chats = useSelector((state: RootState) => state.user.user.chats) || {};
 
+  const friendList = useSelector((state: RootState) => state.friend.data);
+
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
@@ -21,16 +23,21 @@ function ChatListPage({navigation}: NavigationProps): JSX.Element {
         alignItems: 'center',
       }}
       style={styles.container}>
-      {Object.keys(chats).map(id => {
-        return (
-          <ChatItem
-            key={id}
-            navigation={navigation}
-            chat={chats[id]}
-            friendId={id}
-          />
-        );
-      })}
+      {Object.keys(chats)
+        .filter(id => {
+          // 即使在chats字段中存在该用户，还需要数据库中存在该用户的信息，才会显示
+          return friendList.find(friend => friend.id === id);
+        })
+        .map(id => {
+          return (
+            <ChatItem
+              key={id}
+              navigation={navigation}
+              chat={chats[id]}
+              friendId={id}
+            />
+          );
+        })}
     </ScrollView>
   );
 }

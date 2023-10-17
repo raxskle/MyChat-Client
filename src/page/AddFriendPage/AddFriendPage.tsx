@@ -74,7 +74,7 @@ function AddFriendPage({navigation}: NavigationProps): JSX.Element {
         </View>
       )}
 
-      <Text>我的微信号：{userId}</Text>
+      <Text style={styles.myId}>我的微信号：{userId}</Text>
     </View>
   );
 }
@@ -137,6 +137,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
+  },
+  myId: {
+    marginHorizontal: 10,
   },
 });
 

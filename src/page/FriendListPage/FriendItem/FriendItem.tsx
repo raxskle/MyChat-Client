@@ -33,7 +33,9 @@ function FriendItem({
           source={avator}
         />
         <View style={styles.main}>
-          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.name} numberOfLines={1}>
+            {name}
+          </Text>
         </View>
       </View>
     </Pressable>
@@ -70,11 +72,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  data: {},
   name: {
     fontSize: 17,
     fontWeight: 'normal',
     color: 'black',
+    flex: 1,
+    marginRight: 40,
   },
 });
 

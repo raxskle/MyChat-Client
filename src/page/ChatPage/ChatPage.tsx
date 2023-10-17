@@ -61,6 +61,7 @@ function ChatPage({route, navigation}: NavigationProps): JSX.Element {
             // 自己的消息
             return <GreenChat key={item.time} chat={item} avator={''} />;
           } else if (item.userid === friendId) {
+            // 对方的消息
             return <WhiteChat key={item.time} chat={item} avator={''} />;
           }
         })}

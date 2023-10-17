@@ -41,6 +41,7 @@ function LoginPage({navigation}: {navigation: any}): JSX.Element {
           <TextInput
             style={styles.input}
             placeholder="请填写用户名"
+            maxLength={16}
             onChangeText={newId => setId(newId)}
             defaultValue={id}
           />
@@ -50,6 +51,7 @@ function LoginPage({navigation}: {navigation: any}): JSX.Element {
           <TextInput
             style={styles.input}
             placeholder="请填写密码"
+            maxLength={16}
             // keyboardType="visible-password"
             secureTextEntry={true}
             editable={true}
@@ -124,7 +126,10 @@ const styles = StyleSheet.create({
   },
   input: {
     padding: 0,
+    marginRight: 20,
     fontSize: 17,
+    overflow: 'hidden',
+    flex: 1,
   },
   btn: {
     fontSize: 17,

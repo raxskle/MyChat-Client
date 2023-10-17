@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: 'green',
     margin: 10,
+    marginBottom: 0,
   },
 });
 

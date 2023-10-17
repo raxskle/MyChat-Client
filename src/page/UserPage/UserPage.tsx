@@ -22,7 +22,7 @@ function UserPage({navigation}: {route: any; navigation: any}): JSX.Element {
           style={styles.avator}
           source={{uri: 'https://blog.raxskle.fun/images/mie.png'}}
         />
-        <View>
+        <View style={styles.data}>
           <Text style={styles.name}>{user.name}</Text>
           <Text style={styles.id}>微信号：{user.id}</Text>
         </View>
@@ -75,6 +75,9 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingBottom: 60,
     flexDirection: 'row',
+  },
+  data: {
+    flex: 1,
   },
   avator: {
     width: 60,
