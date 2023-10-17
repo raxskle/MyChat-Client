@@ -15,7 +15,9 @@ import WhiteChat from './WhiteChat/WhiteChat';
 import {RootState} from '../../store';
 import {useSelector} from 'react-redux';
 import {NavigationProps} from '../../utils/types';
-import {ChatType} from '../../store/userSlice';
+
+import {sendMsg} from '../../socket';
+// import {sendMsg} from '../../socket';
 
 const window = Dimensions.get('window');
 
@@ -24,19 +26,22 @@ const faceIcon = require('../../assets/ChatPage/smile.png');
 const moreIcon = require('../../assets/ChatPage/more.png');
 
 interface RouteParams {
-  chat: ChatType[];
   friendId: string;
 }
 
 function ChatPage({route, navigation}: NavigationProps): JSX.Element {
-  const {friendId, chat}: RouteParams = route.params;
+  const {friendId}: RouteParams = route.params;
 
-  // 自己和对方的信息
+  // 对方的信息
   const friendInfo = useSelector((state: RootState) => {
     return state.friend.data.find(item => item.id === friendId);
   });
+  // 自己的信息
   const user = useSelector((state: RootState) => state.user.user);
-  if (user.id === '' || !friendInfo) {
+
+  const chat = user.chats?.[friendId] || [];
+
+  if (user.id === '' || !friendInfo || !chat) {
     navigation.navigate('Login');
   }
 
@@ -50,12 +55,31 @@ function ChatPage({route, navigation}: NavigationProps): JSX.Element {
     });
   }, [friendInfo, navigation]);
 
-  // 滚动
-  const scrollViewRef = useRef<ScrollView>(null);
+  // 发送
+  const handleSend = () => {
+    if (text.length > 0) {
+      console.log('handle send');
+      // 发送
+      sendMsg({
+        to: friendId,
+        from: user.id,
+        content: text,
+      });
+      setText('');
+      scrollViewRef.current?.scrollToEnd({animated: true});
+    }
+  };
 
+  // 滚动到底部
+  const scrollViewRef = useRef<ScrollView>(null);
+  // 初始进入时滚动
   useEffect(() => {
     scrollViewRef.current?.scrollToEnd({animated: false});
   }, []);
+  // 有新消息时滚动
+  useEffect(() => {
+    scrollViewRef.current?.scrollToEnd({animated: true});
+  }, [user]);
 
   return (
     <View style={styles.container}>
@@ -66,10 +90,10 @@ function ChatPage({route, navigation}: NavigationProps): JSX.Element {
         {chat.map(item => {
           if (item.userid === user.id) {
             // 自己的消息
-            return <GreenChat key={item.time} chat={item} avator={''} />;
+            return <GreenChat key={Math.random()} chat={item} avator={''} />;
           } else if (item.userid === friendId) {
             // 对方的消息
-            return <WhiteChat key={item.time} chat={item} avator={''} />;
+            return <WhiteChat key={Math.random()} chat={item} avator={''} />;
           }
         })}
         <View style={styles.gap} />
@@ -85,13 +109,16 @@ function ChatPage({route, navigation}: NavigationProps): JSX.Element {
           onFocus={() => {
             scrollViewRef.current?.scrollToEnd({animated: true});
           }}
+          onSubmitEditing={handleSend}
         />
         <Image style={styles.rightBtn} source={faceIcon} />
         {text.length === 0 ? (
           <Image style={styles.rightBtn} source={moreIcon} />
         ) : (
           <View style={styles.sendBtn}>
-            <Text style={styles.sendText}>发送</Text>
+            <Text style={styles.sendText} onPress={handleSend}>
+              发送
+            </Text>
           </View>
         )}
       </View>

@@ -24,7 +24,7 @@ function ChatItem({navigation, friendId, chat}: ChatItemProps): JSX.Element {
   return (
     <Pressable
       onPress={() => {
-        navigation.navigate('Chat', {friendId, chat});
+        navigation.navigate('Chat', {friendId});
       }}>
       <View style={styles.item}>
         <Image

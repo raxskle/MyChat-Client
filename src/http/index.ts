@@ -14,7 +14,8 @@ export const getUserInfo = async (id: string, password: string) => {
       console.log('getUserInfo错误');
       return err;
     });
-  console.log('getUserInfo:', user);
+
+  console.log('http:getUserInfo:', user);
   if (!user.data) {
     // 没返回数据
     Alert.alert(user.msg);
@@ -37,7 +38,7 @@ export const getFriendInfo = async (idList: string[]) => {
       return err;
     });
 
-  console.log('getFriendInfo:', friends);
+  console.log('http:getFriendInfo:', friends);
   if (!friends.data) {
     // 没返回数据
     Alert.alert(friends.msg);
@@ -58,7 +59,8 @@ export const addFriend = async (userId: string, friendId: string) => {
       console.log('addFriend错误');
       return err;
     });
-  console.log(response.msg);
+
+  console.log('http:addFriend:', response.msg);
 
   return response;
 };

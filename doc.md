@@ -37,6 +37,10 @@ userId: string;
 content: string;
 }
 
+具体流程实现：
+
+在 Login 执行登录之后，连接 socket 进入 online，当
+
 搜索记录模块
 
 \*朋友圈模块

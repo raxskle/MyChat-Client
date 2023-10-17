@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 // redux
 import {Provider, useSelector} from 'react-redux';
@@ -34,6 +34,7 @@ import UserPage from './src/page/UserPage/UserPage';
 import ChatPage from './src/page/ChatPage/ChatPage';
 import FriendProfilePage from './src/page/FriendProfilePage/FriendProfilePage';
 import AddFriendPage from './src/page/AddFriendPage/AddFriendPage';
+import {close, open, useReceiveMsg} from './src/socket';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -106,6 +107,16 @@ const Home = ({navigation}: {navigation: any}) => {
   if (user.id === '') {
     navigation.navigate('Login');
   }
+
+  useReceiveMsg();
+
+  useEffect(() => {
+    open(user.id);
+
+    return () => {
+      close(user.id);
+    };
+  }, [user.id]);
 
   return (
     <Tab.Navigator

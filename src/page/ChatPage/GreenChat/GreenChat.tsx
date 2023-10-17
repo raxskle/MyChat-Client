@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   bubble: {
-    marginTop: 10,
+    marginTop: 12,
     padding: 10,
     paddingLeft: 12,
     paddingRight: 12,
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 6,
     backgroundColor: 'green',
-    margin: 10,
+    margin: 12,
     marginBottom: 0,
   },
 });

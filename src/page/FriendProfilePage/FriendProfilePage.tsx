@@ -24,9 +24,6 @@ function FriendProfilePage({route, navigation}: NavigationProps): JSX.Element {
   }
 
   const userId = useSelector((state: RootState) => state.user.user.id);
-  const chat = useSelector(
-    (state: RootState) => state.user.user.chats?.[friendInfo.id] || [],
-  );
 
   // 该用户已经添加通讯录的朋友
   const existIdList = useSelector(
@@ -57,7 +54,7 @@ function FriendProfilePage({route, navigation}: NavigationProps): JSX.Element {
       {isFriend ? (
         <Pressable
           onPress={() => {
-            navigation.navigate('Chat', {friendId: friendInfo.id, chat: chat});
+            navigation.navigate('Chat', {friendId: friendInfo.id});
           }}>
           <View style={styles.item}>
             <Text style={styles.highlight}>发消息</Text>
