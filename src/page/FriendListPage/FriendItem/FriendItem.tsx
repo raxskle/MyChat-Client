@@ -1,15 +1,9 @@
 import React from 'react';
 
-import {
-  Image,
-  ImageSourcePropType,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Image, ImageSourcePropType, StyleSheet, Text, View} from 'react-native';
 
 import {Dimensions} from 'react-native';
+import PressableWithStyle from '../../../components/PressableWithStyle';
 const window = Dimensions.get('window');
 
 interface FriendItemProps {
@@ -26,7 +20,7 @@ function FriendItem({
   avatorColor,
 }: FriendItemProps): JSX.Element {
   return (
-    <Pressable onPress={handlePress}>
+    <PressableWithStyle onPress={handlePress}>
       <View style={styles.item}>
         <Image
           style={[styles.avator, {backgroundColor: avatorColor || 'green'}]}
@@ -38,7 +32,7 @@ function FriendItem({
           </Text>
         </View>
       </View>
-    </Pressable>
+    </PressableWithStyle>
   );
 }
 
@@ -47,13 +41,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'white',
+    borderWidth: 0,
     // backgroundColor: 'transparent',
     width: window.width,
     height: 56,
     zIndex: 2,
     elevation: 2,
+    shadowColor: 'transparent',
   },
+
   avator: {
     width: 40,
     height: 40,
@@ -66,7 +62,7 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     borderBottomWidth: 1,
-    borderBottomColor: '#f1f1f1',
+    borderBottomColor: 'rgba(0, 0, 0, 0.06)',
     flexDirection: 'row',
     height: 56,
     justifyContent: 'space-between',

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {View, StyleSheet, Text, Image, Pressable} from 'react-native';
+import {View, StyleSheet, Text, Image} from 'react-native';
 
 import {Dimensions} from 'react-native';
 import {NavigationProps} from '../../../utils/types';
@@ -8,6 +8,7 @@ import {ChatType} from '../../../store/userSlice';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../store';
 import {formatTime} from '../../../utils/formatTime';
+import PressableWithStyle from '../../../components/PressableWithStyle';
 const window = Dimensions.get('window');
 
 interface ChatItemProps extends NavigationProps {
@@ -22,7 +23,7 @@ function ChatItem({navigation, friendId, chat}: ChatItemProps): JSX.Element {
   const lastMsg = chat.length > 0 ? chat[chat.length - 1] : undefined;
 
   return (
-    <Pressable
+    <PressableWithStyle
       onPress={() => {
         navigation.navigate('Chat', {friendId});
       }}>
@@ -48,7 +49,7 @@ function ChatItem({navigation, friendId, chat}: ChatItemProps): JSX.Element {
           </Text>
         </View>
       </View>
-    </Pressable>
+    </PressableWithStyle>
   );
 }
 
@@ -57,10 +58,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'white',
     width: window.width,
     height: 70,
   },
+
   avator: {
     width: 50,
     height: 50,
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
     maxWidth: window.width,
     borderBottomWidth: 1,
-    borderBottomColor: '#f1f1f1',
+    borderBottomColor: 'rgba(0, 0, 0, 0.06)',
     flexDirection: 'row',
     height: 70,
     justifyContent: 'space-between',

@@ -115,7 +115,7 @@ function ChatPage({route, navigation}: NavigationProps): JSX.Element {
         {text.length === 0 ? (
           <Image style={styles.rightBtn} source={moreIcon} />
         ) : (
-          <View style={styles.sendBtn}>
+          <View style={[styles.sendBtn]}>
             <Text style={styles.sendText} onPress={handleSend}>
               发送
             </Text>

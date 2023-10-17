@@ -1,13 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Alert,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {Alert, Image, StyleSheet, Text, TextInput, View} from 'react-native';
 import {NavigationProps} from '../../utils/types';
 
 import {useSelector} from 'react-redux';
@@ -15,6 +7,7 @@ import type {RootState} from '../../store/index';
 
 import {Dimensions} from 'react-native';
 import {getFriendInfo} from '../../http';
+import PressableWithStyle from '../../components/PressableWithStyle';
 
 const window = Dimensions.get('window');
 
@@ -57,7 +50,7 @@ function AddFriendPage({navigation}: NavigationProps): JSX.Element {
       </View>
 
       {status === 'texting' && searchText !== '' && (
-        <Pressable onPress={search}>
+        <PressableWithStyle onPress={search}>
           <View style={styles.addBox}>
             <Image
               style={styles.addIcon}
@@ -65,7 +58,7 @@ function AddFriendPage({navigation}: NavigationProps): JSX.Element {
             />
             <Text style={styles.addText}>搜索:{searchText}</Text>
           </View>
-        </Pressable>
+        </PressableWithStyle>
       )}
 
       {status === 'notFound' && (
@@ -120,9 +113,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: 'white',
-    marginBottom: 10,
   },
+
   addIcon: {
     width: 40,
     height: 40,
@@ -136,10 +128,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
   },
   myId: {
-    marginHorizontal: 10,
+    marginTop: 10,
   },
 });
 

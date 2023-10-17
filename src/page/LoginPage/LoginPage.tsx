@@ -9,6 +9,7 @@ import {
   TextInput,
   Image,
   Alert,
+  Modal,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 
@@ -27,6 +28,8 @@ function LoginPage({navigation}: {navigation: any}): JSX.Element {
 
   const btnActive = id !== '' && password !== '';
 
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <ScrollView
       contentContainerStyle={{
@@ -34,6 +37,20 @@ function LoginPage({navigation}: {navigation: any}): JSX.Element {
         alignItems: 'center',
       }}
       style={styles.container}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>登录中...</Text>
+          </View>
+        </View>
+      </Modal>
+
       <View style={styles.top}>
         <Image style={styles.image} source={require('../../assets/Icon.png')} />
         <View style={styles.item}>
@@ -62,9 +79,9 @@ function LoginPage({navigation}: {navigation: any}): JSX.Element {
       </View>
 
       <Text
-        style={[styles.btn, btnActive ? styles.btnActive : styles.btnDisabled]}
         onPress={async () => {
           if (id !== '' && password !== '') {
+            setModalVisible(true);
             const user = await getUserInfo(id, password);
             if (!user) {
               Alert.alert('登陆失败');
@@ -82,9 +99,11 @@ function LoginPage({navigation}: {navigation: any}): JSX.Element {
             );
 
             // 跳转进入
+            setModalVisible(false);
             navigation.navigate('Home');
           }
-        }}>
+        }}
+        style={[styles.btn, btnActive ? styles.btnActive : styles.btnDisabled]}>
         注册/登录
       </Text>
     </ScrollView>
@@ -147,6 +166,25 @@ const styles = StyleSheet.create({
   btnActive: {
     backgroundColor: '#1AAD19',
     color: 'white',
+  },
+  centeredView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    flex: 1,
+  },
+  modalView: {
+    width: window.width * 0.5,
+    height: window.width * 0.4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    opacity: 1,
+    borderRadius: 10,
+  },
+  modalText: {
+    color: 'black',
+    fontSize: 16,
   },
 });
 

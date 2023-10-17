@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Alert, Image, StyleSheet, Text, View} from 'react-native';
 import {NavigationProps} from '../../utils/types';
 
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,6 +10,7 @@ import {Dimensions} from 'react-native';
 import {addFriend} from '../../http';
 import {setUser} from '../../store/userSlice';
 import {FriendInfo} from '../../store/friendSlice';
+import PressableWithStyle from '../../components/PressableWithStyle';
 
 const window = Dimensions.get('window');
 
@@ -45,23 +46,25 @@ function FriendProfilePage({route, navigation}: NavigationProps): JSX.Element {
         </View>
       </View>
 
-      <View style={styles.item}>
-        <Text style={styles.text}>设置备注和标签</Text>
-      </View>
+      <PressableWithStyle>
+        <View style={styles.item}>
+          <Text style={styles.text}>设置备注和标签</Text>
+        </View>
+      </PressableWithStyle>
 
       <View style={styles.gap} />
 
       {isFriend ? (
-        <Pressable
+        <PressableWithStyle
           onPress={() => {
             navigation.navigate('Chat', {friendId: friendInfo.id});
           }}>
           <View style={styles.item}>
             <Text style={styles.highlight}>发消息</Text>
           </View>
-        </Pressable>
+        </PressableWithStyle>
       ) : (
-        <Pressable
+        <PressableWithStyle
           onPress={() => {
             addFriend(userId, friendInfo.id).then(res => {
               Alert.alert(res.msg);
@@ -71,7 +74,7 @@ function FriendProfilePage({route, navigation}: NavigationProps): JSX.Element {
           <View style={styles.item}>
             <Text style={styles.highlight}>添加到通讯录</Text>
           </View>
-        </Pressable>
+        </PressableWithStyle>
       )}
     </View>
   );
@@ -110,7 +113,7 @@ const styles = StyleSheet.create({
   },
   id: {},
   item: {
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     width: window.width,
     height: 50,
     justifyContent: 'center',

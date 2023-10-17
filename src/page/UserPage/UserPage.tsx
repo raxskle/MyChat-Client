@@ -1,11 +1,12 @@
 import React from 'react';
 
-import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
 
 import {useSelector} from 'react-redux';
 import type {RootState} from '../../store/index';
 
 import {Dimensions} from 'react-native';
+import PressableWithStyle from '../../components/PressableWithStyle';
 const window = Dimensions.get('window');
 
 function UserPage({navigation}: {route: any; navigation: any}): JSX.Element {
@@ -27,31 +28,33 @@ function UserPage({navigation}: {route: any; navigation: any}): JSX.Element {
           <Text style={styles.id}>微信号：{user.id}</Text>
         </View>
       </View>
-
       <View style={styles.gap} />
-
-      <View style={styles.item}>
-        <Text style={styles.text}>头像</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.text}>名字</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.text}>微信号</Text>
-      </View>
-
+      <PressableWithStyle>
+        <View style={styles.item}>
+          <Text style={styles.text}>头像</Text>
+        </View>
+      </PressableWithStyle>
+      <PressableWithStyle>
+        <View style={styles.item}>
+          <Text style={styles.text}>名字</Text>
+        </View>
+      </PressableWithStyle>
+      <PressableWithStyle>
+        <View style={styles.item}>
+          <Text style={styles.text}>微信号</Text>
+        </View>
+      </PressableWithStyle>
       <View style={styles.gap} />
-
-      <Pressable onPress={logout}>
+      <PressableWithStyle onPress={logout}>
         <View style={styles.item}>
           <Text style={styles.text}>切换账号</Text>
         </View>
-      </Pressable>
-      <Pressable onPress={logout}>
+      </PressableWithStyle>
+      <PressableWithStyle onPress={logout}>
         <View style={styles.item}>
           <Text style={styles.text}>退出</Text>
         </View>
-      </Pressable>
+      </PressableWithStyle>
     </View>
   );
 }
@@ -94,13 +97,12 @@ const styles = StyleSheet.create({
     height: 10,
   },
   item: {
-    backgroundColor: 'white',
     width: window.width,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    borderTopColor: '#F3F3F3',
-    borderTopWidth: 1,
+    // borderTopColor: '#F3F3F3',
+    // borderTopWidth: 1,
     borderBottomColor: '#F3F3F3',
     borderBottomWidth: 1,
   },

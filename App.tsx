@@ -168,6 +168,7 @@ function App(): JSX.Element {
               },
               headerRight: HeaderButton,
               headerLeft: HeaderBland,
+              // gestureEnabled: true,
             }}>
             <Stack.Screen
               name="Login"
