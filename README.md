@@ -18,7 +18,7 @@
 
 腾讯微信客户端开发菁英班结课作业，迷你即时聊天应用的客户端。
 
-使用跨端技术进行安卓移动端开发，而非原生安卓开发。
+使用跨端技术进行安卓移动端开发。已由 React Native CLI 迁移至 expo。
 
 ## Technologies
 
@@ -28,6 +28,13 @@
 - TypeScript
 - WebSocket(socket.io)
 - Redux
+
+## todo
+
+- 发送图片
+- 自定义用户信息
+- 群组聊天
+- 表情系统
 
 ## Features
 

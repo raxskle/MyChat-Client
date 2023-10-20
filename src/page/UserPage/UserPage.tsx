@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     marginRight: 30,
   },
   name: {
-    fontSize: 22,
+    fontSize: 24,
     color: "#131313",
     marginBottom: 8,
   },
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#030303",
-    fontSize: 16,
+    fontSize: 17,
   },
 });
 
