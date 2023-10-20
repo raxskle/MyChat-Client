@@ -90,7 +90,6 @@ export function SettingTextPage({ navigation }: NavigationProps): JSX.Element {
           onChangeText={(newText) => {
             setText(newText);
             if (sharedSetText) {
-              console.log("ss", newText);
               sharedSetText(newText);
             }
           }}

@@ -10,6 +10,7 @@ export interface ChatType {
   time: string;
   userid: string;
   content: string;
+  type: "text" | "image";
 }
 
 export interface User {

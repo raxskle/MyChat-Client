@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   ScrollView,
@@ -9,18 +9,16 @@ import {
   Image,
   Text,
   Pressable,
+  Modal,
 } from "react-native";
 
 import { Dimensions } from "react-native";
-import GreenChat from "./GreenChat/GreenChat";
-import WhiteChat from "./WhiteChat/WhiteChat";
+
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
 import { NavigationProps } from "../../utils/types";
 
 import { sendMsg } from "../../socket";
-import { formatTime } from "../../utils/formatTime";
-// import {sendMsg} from '../../socket';
 
 const window = Dimensions.get("window");
 
@@ -31,6 +29,8 @@ const moreIcon = require("../../assets/ChatPage/more.png");
 import * as ImagePicker from "expo-image-picker";
 import PressableWithStyle from "../../components/PressableWithStyle";
 
+import Content from "./Content/Content";
+import ImageViewer from "react-native-image-zoom-viewer";
 interface RouteParams {
   friendId: string;
 }
@@ -64,15 +64,16 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
   // 发送
   const handleSend = () => {
     if (text.length > 0) {
-      console.log("handle send");
       // 发送
       sendMsg({
         to: friendId,
         from: user.id,
         content: text,
+        type: "text",
       });
       setText("");
-      scrollViewRef.current?.scrollToEnd({ animated: true });
+      console.log("scrollToEnd ");
+      scrollViewRef.current?.scrollToEnd({ animated: false });
     }
   };
 
@@ -91,9 +92,9 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
   const openImageLibrary = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
+      allowsEditing: true,
       // aspect: [4, 3],
-      quality: 0.6,
+      quality: 0.4,
       base64: true,
     });
 
@@ -101,6 +102,15 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
       // 拿到pick的图片
       console.log(result.assets[0].type);
       const base64URI = "data:image/png;base64," + result.assets[0].base64;
+
+      sendMsg({
+        to: friendId,
+        from: user.id,
+        content: base64URI,
+        type: "image",
+      });
+      console.log("scrollToEnd ");
+      scrollViewRef.current?.scrollToEnd({ animated: false });
     }
   };
 
@@ -109,40 +119,40 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
 
   const inputRef = useRef(null);
 
+  console.log("render");
+
+  const images = chat
+    .filter((item) => item.type === "image")
+    .map((item) => {
+      return {
+        url: item.content,
+      };
+    });
+
+  const [zoom, setZoom] = useState(false);
+
+  const [clickIndex, setIndex] = useState(0);
+
+  const ZoomImage = useCallback((url) => {
+    const index = images.findIndex((item) => item.url === url);
+    setIndex(index);
+    setZoom(true);
+  }, []);
+
   return (
     <View style={styles.container}>
-      <ScrollView
-        ref={scrollViewRef}
-        contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={{
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        style={[styles.scrollview]}
-      >
-        <Text
-          style={styles.helloText}
-        >{`你已添加了${friendInfo?.name}，现在可以开始聊天了！`}</Text>
-        {chat.map((item, index) => {
-          return (
-            <View style={styles.singleChatItem} key={Math.random()}>
-              {index === 0 ||
-                (Number(item.time) - Number(chat[index - 1].time) >
-                  1000 * 60 * 10 && (
-                  <Text style={styles.chatTime}>
-                    {formatTime(item.time, "full")}
-                  </Text>
-                ))}
-              {item.userid === user.id ? (
-                <GreenChat chat={item} avator={user.avator} />
-              ) : (
-                <WhiteChat chat={item} avator={friendInfo.avator} />
-              )}
-            </View>
-          );
-        })}
-        <View style={styles.gap} />
-      </ScrollView>
+      <Content ZoomImage={ZoomImage} friendId={friendId} ref={scrollViewRef} />
+
+      <Modal visible={zoom} transparent={true}>
+        <ImageViewer
+          onClick={() => {
+            setZoom(false);
+          }}
+          imageUrls={images}
+          index={clickIndex}
+          pageAnimateTime={200}
+        />
+      </Modal>
 
       <View style={styles.btmBar}>
         <Image style={styles.leftBtn} source={voiceIcon} />
@@ -154,6 +164,7 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
           defaultValue={text}
           onFocus={() => {
             setShowMore(false);
+            console.log("scrollToEnd ");
             scrollViewRef.current?.scrollToEnd({ animated: true });
           }}
           onSubmitEditing={handleSend}
@@ -161,14 +172,15 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
         <Pressable>
           <Image style={styles.rightBtn} source={faceIcon} />
         </Pressable>
-
         {text.length === 0 ? (
           <Pressable
             onPress={() => {
               inputRef.current.blur();
+              console.log("scrollToEnd ");
+              scrollViewRef.current?.scrollToEnd({ animated: true });
               setTimeout(() => {
                 setShowMore((more) => !more);
-              }, 0);
+              }, 50);
             }}
           >
             <Image style={styles.rightBtn} source={moreIcon} />

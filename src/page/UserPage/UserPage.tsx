@@ -43,12 +43,12 @@ function UserPage({
 
     if (!result.canceled) {
       // 拿到pick的图片
-      console.log(result.assets[0].type);
+      // console.log(result.assets[0].type);
       const base64URI = "data:image/png;base64," + result.assets[0].base64;
 
-      console.log("发送", { base64: base64URI, id: user.id });
+      // console.log("发送", { base64: base64URI, id: user.id });
       const newAvator = await uploadAvator({ base64: base64URI, id: user.id });
-      console.log("设置头像,", newAvator);
+      // console.log("设置头像,", newAvator);
       dispatch(changeUserAvator({ avator: newAvator }));
     }
   };

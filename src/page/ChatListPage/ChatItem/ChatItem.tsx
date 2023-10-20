@@ -22,6 +22,18 @@ function ChatItem({ navigation, friendId, chat }: ChatItemProps): JSX.Element {
 
   const lastMsg = chat.length > 0 ? chat[chat.length - 1] : undefined;
 
+  const renderLastMsg = (lastMsg: ChatType) => {
+    if (!lastMsg) {
+      return `你已添加了${info?.name}，现在可以开始聊天了!`;
+    }
+
+    if (lastMsg.type === "text") {
+      return lastMsg.content.replaceAll("\n", "  ");
+    } else if (lastMsg.type === "image") {
+      return "[图片]";
+    }
+  };
+
   return (
     <PressableWithStyle
       onPress={() => {
@@ -37,9 +49,7 @@ function ChatItem({ navigation, friendId, chat }: ChatItemProps): JSX.Element {
               {info?.name}
             </Text>
             <Text style={styles.msg} numberOfLines={1}>
-              {lastMsg
-                ? lastMsg.content.replaceAll("\n", "  ")
-                : `你已添加了${info?.name}，现在可以开始聊天了!`}
+              {renderLastMsg(lastMsg)}
             </Text>
           </View>
           <Text style={styles.time} numberOfLines={1}>

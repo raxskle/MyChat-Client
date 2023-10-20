@@ -81,7 +81,8 @@ export const uploadAvator = async (data) => {
       return err;
     });
 
-  console.log("http:uploadAvator:", response);
+  // console.log("http:uploadAvator:", response);
+  console.log("http:uploadAvator:");
   return response.data;
 };
 
