@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useRef, useState} from 'react';
 
 import {
@@ -7,6 +8,7 @@ import {
   View,
   Image,
   Text,
+  Pressable,
 } from 'react-native';
 
 import {Dimensions} from 'react-native';
@@ -17,6 +19,7 @@ import {useSelector} from 'react-redux';
 import {NavigationProps} from '../../utils/types';
 
 import {sendMsg} from '../../socket';
+import {formatTime} from '../../utils/formatTime';
 // import {sendMsg} from '../../socket';
 
 const window = Dimensions.get('window');
@@ -24,6 +27,10 @@ const window = Dimensions.get('window');
 const voiceIcon = require('../../assets/ChatPage/voice2.png');
 const faceIcon = require('../../assets/ChatPage/smile.png');
 const moreIcon = require('../../assets/ChatPage/more.png');
+
+// import {launchImageLibrary} from 'react-native-image-picker';
+
+// import ImagePicker from 'react-native-image-crop-picker';
 
 interface RouteParams {
   friendId: string;
@@ -81,20 +88,53 @@ function ChatPage({route, navigation}: NavigationProps): JSX.Element {
     scrollViewRef.current?.scrollToEnd({animated: true});
   }, [user]);
 
+  // 打开相册
+  const openImageLibrary = async () => {
+    // const res = await launchImageLibrary({mediaType: 'photo'}).catch(err => {
+    //   console.log(err);
+    // });
+    // console.log(res);
+    // ImagePicker.openPicker({
+    //   width: 300,
+    //   height: 400,
+    //   cropping: true,
+    // })
+    //   .then(image => {
+    //     console.log(image);
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
         ref={scrollViewRef}
         contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}
         style={[styles.scrollview]}>
-        {chat.map(item => {
-          if (item.userid === user.id) {
-            // 自己的消息
-            return <GreenChat key={Math.random()} chat={item} avator={''} />;
-          } else if (item.userid === friendId) {
-            // 对方的消息
-            return <WhiteChat key={Math.random()} chat={item} avator={''} />;
-          }
+        <Text
+          style={
+            styles.helloText
+          }>{`你已添加了${friendInfo?.name}，现在可以开始聊天了！`}</Text>
+        {chat.map((item, index) => {
+          return (
+            <View style={styles.singleChatItem} key={Math.random()}>
+              {index === 0 ||
+                (Number(item.time) - Number(chat[index - 1].time) >
+                  1000 * 60 * 10 && (
+                  <Text style={styles.chatTime}>
+                    {formatTime(item.time, 'full')}
+                  </Text>
+                ))}
+              {item.userid === user.id ? (
+                <GreenChat chat={item} avator={''} />
+              ) : (
+                <WhiteChat chat={item} avator={''} />
+              )}
+            </View>
+          );
         })}
         <View style={styles.gap} />
       </ScrollView>
@@ -113,7 +153,9 @@ function ChatPage({route, navigation}: NavigationProps): JSX.Element {
         />
         <Image style={styles.rightBtn} source={faceIcon} />
         {text.length === 0 ? (
-          <Image style={styles.rightBtn} source={moreIcon} />
+          <Pressable onPress={openImageLibrary}>
+            <Image style={styles.rightBtn} source={moreIcon} />
+          </Pressable>
         ) : (
           <View style={[styles.sendBtn]}>
             <Text style={styles.sendText} onPress={handleSend}>
@@ -145,8 +187,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f1f1f1',
   },
+  helloText: {
+    marginVertical: 20,
+  },
+  singleChatItem: {
+    width: window.width,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   gap: {
     height: 10,
+  },
+  chatTime: {
+    marginTop: 20,
+    marginBottom: 10,
   },
   btmBar: {
     width: window.width,

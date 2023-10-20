@@ -2,6 +2,13 @@
 
 基于跨端开发的 mini 微信
 
+## todo
+
+- 发送图片
+- 自定义用户信息
+- 群组聊天
+- 表情系统
+
 ## 实现模块
 
 - 注册登陆模块
@@ -36,10 +43,6 @@ time: Date();
 userId: string;
 content: string;
 }
-
-具体流程实现：
-
-在 Login 执行登录之后，连接 socket 进入 online，当
 
 搜索记录模块
 

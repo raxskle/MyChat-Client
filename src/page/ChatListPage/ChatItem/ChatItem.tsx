@@ -41,7 +41,7 @@ function ChatItem({navigation, friendId, chat}: ChatItemProps): JSX.Element {
             <Text style={styles.msg} numberOfLines={1}>
               {lastMsg
                 ? lastMsg.content.replaceAll('\n', '  ')
-                : `你已添加了${info?.name},现在可以开始聊天了!`}
+                : `你已添加了${info?.name}，现在可以开始聊天了!`}
             </Text>
           </View>
           <Text style={styles.time} numberOfLines={1}>

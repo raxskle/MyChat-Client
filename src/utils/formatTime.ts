@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-export const formatTime = (timestamp: string) => {
+export const formatTime = (timestamp: string, mode?: string) => {
   // 莫名其妙慢了8小时，补上东八区的时差
   const offset = 8 * 60 * 60 * 1000;
   const offsetTimestamp = parseInt(timestamp, 10) + offset;
@@ -21,6 +21,20 @@ export const formatTime = (timestamp: string) => {
 
   const offsetNowTimestamp = new Date().getTime() + offset;
   const now = new Date(offsetNowTimestamp);
+
+  if (mode === 'full') {
+    if (year < now.getFullYear()) {
+      return `${year}年${month}月${day}日 ${Hour}:${Min}`;
+    } else if (
+      year === now.getFullYear() &&
+      month <= now.getMonth() + 1 &&
+      day < now.getDate()
+    ) {
+      return `${month}月${day}日 ${Hour}:${Min}`;
+    } else {
+      return `${Hour}:${Min}`;
+    }
+  }
 
   if (year < now.getFullYear()) {
     // 去年

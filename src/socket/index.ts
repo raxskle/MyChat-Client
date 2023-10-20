@@ -19,11 +19,15 @@ export const useReceiveMsg = () => {
 
   useEffect(() => {
     console.log("set socket.on('receiveMsg')");
+
     socket.on('receiveMsg', data => {
       console.log('socket:receiveMsg:', data);
-
       dispatch(updateChatByOne({friendId: data.friendId, chat: data.chat}));
     });
+
+    return () => {
+      socket.off('receiveMsg');
+    };
   }, [dispatch]);
 };
 
