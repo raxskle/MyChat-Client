@@ -28,9 +28,8 @@ const voiceIcon = require("../../assets/ChatPage/voice2.png");
 const faceIcon = require("../../assets/ChatPage/smile.png");
 const moreIcon = require("../../assets/ChatPage/more.png");
 
-// import {launchImageLibrary} from 'react-native-image-picker';
-
-// import ImagePicker from 'react-native-image-crop-picker';
+import * as ImagePicker from "expo-image-picker";
+import PressableWithStyle from "../../components/PressableWithStyle";
 
 interface RouteParams {
   friendId: string;
@@ -90,22 +89,25 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
 
   // 打开相册
   const openImageLibrary = async () => {
-    // const res = await launchImageLibrary({mediaType: 'photo'}).catch(err => {
-    //   console.log(err);
-    // });
-    // console.log(res);
-    // ImagePicker.openPicker({
-    //   width: 300,
-    //   height: 400,
-    //   cropping: true,
-    // })
-    //   .then(image => {
-    //     console.log(image);
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      // aspect: [4, 3],
+      quality: 0.6,
+      base64: true,
+    });
+
+    if (!result.canceled) {
+      // 拿到pick的图片
+      console.log(result.assets[0].type);
+      const base64URI = "data:image/png;base64," + result.assets[0].base64;
+    }
   };
+
+  // 显示more 相册按钮等
+  const [showMore, setShowMore] = useState(false);
+
+  const inputRef = useRef(null);
 
   return (
     <View style={styles.container}>
@@ -145,18 +147,30 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
       <View style={styles.btmBar}>
         <Image style={styles.leftBtn} source={voiceIcon} />
         <TextInput
+          ref={inputRef}
           style={styles.inputBox}
           placeholder=""
           onChangeText={(newText) => setText(newText)}
           defaultValue={text}
           onFocus={() => {
+            setShowMore(false);
             scrollViewRef.current?.scrollToEnd({ animated: true });
           }}
           onSubmitEditing={handleSend}
         />
-        <Image style={styles.rightBtn} source={faceIcon} />
+        <Pressable>
+          <Image style={styles.rightBtn} source={faceIcon} />
+        </Pressable>
+
         {text.length === 0 ? (
-          <Pressable onPress={openImageLibrary}>
+          <Pressable
+            onPress={() => {
+              inputRef.current.blur();
+              setTimeout(() => {
+                setShowMore((more) => !more);
+              }, 0);
+            }}
+          >
             <Image style={styles.rightBtn} source={moreIcon} />
           </Pressable>
         ) : (
@@ -167,6 +181,19 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
           </View>
         )}
       </View>
+
+      {showMore && (
+        <View style={styles.moreBox}>
+          <View style={styles.moreItemWrap}>
+            <PressableWithStyle onPress={openImageLibrary}>
+              <Image
+                style={styles.images}
+                source={require("../../assets/ImageGallery.png")}
+              />
+            </PressableWithStyle>
+          </View>
+        </View>
+      )}
     </View>
   );
 }
@@ -250,6 +277,25 @@ const styles = StyleSheet.create({
   },
   sendText: {
     color: "white",
+  },
+  moreBox: {
+    height: window.height * 0.352,
+    width: window.width,
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    flexDirection: "row",
+  },
+  images: {
+    width: 40,
+    height: 40,
+    margin: 14,
+    backgroundColor: "transparent",
+  },
+  moreItemWrap: {
+    borderRadius: 14,
+    overflow: "hidden",
+    margin: 40,
+    backgroundColor: "transparent",
   },
 });
 

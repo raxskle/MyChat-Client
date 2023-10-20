@@ -35,6 +35,10 @@ import ChatPage from "./src/page/ChatPage/ChatPage";
 import FriendProfilePage from "./src/page/FriendProfilePage/FriendProfilePage";
 import AddFriendPage from "./src/page/AddFriendPage/AddFriendPage";
 import { close, open, useReceiveMsg } from "./src/socket";
+import {
+  SettingTextPage,
+  SettingTextTopBtn,
+} from "./src/page/SettingTextPage/SettingTextPage";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -221,6 +225,17 @@ function App(): JSX.Element {
               options={{
                 title: "添加朋友",
                 headerRight: undefined,
+                headerLeft: undefined,
+                headerTransparent: true,
+              }}
+            />
+
+            <Stack.Screen
+              name="SettingName"
+              component={SettingTextPage}
+              options={{
+                title: "更改名字",
+                headerRight: SettingTextTopBtn,
                 headerLeft: undefined,
                 headerTransparent: true,
               }}

@@ -25,6 +25,10 @@ function UserPage({
     navigation.navigate("Login");
   };
 
+  const setName = () => {
+    navigation.navigate("SettingName");
+  };
+
   const dispatch = useDispatch();
 
   const pickImage = async () => {
@@ -62,16 +66,19 @@ function UserPage({
       <PressableWithStyle onPress={pickImage}>
         <View style={styles.item}>
           <Text style={styles.text}>头像</Text>
+          <Text style={styles.arrow}>{">"}</Text>
         </View>
       </PressableWithStyle>
-      <PressableWithStyle>
+      <PressableWithStyle onPress={setName}>
         <View style={styles.item}>
           <Text style={styles.text}>名字</Text>
+          <Text style={styles.arrow}>{">"}</Text>
         </View>
       </PressableWithStyle>
       <PressableWithStyle>
         <View style={styles.item}>
           <Text style={styles.text}>微信号</Text>
+          <Text style={styles.arrow}>{">"}</Text>
         </View>
       </PressableWithStyle>
       <View style={styles.gap} />
@@ -129,7 +136,8 @@ const styles = StyleSheet.create({
   item: {
     width: window.width,
     height: 50,
-    justifyContent: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
     // borderTopColor: '#F3F3F3',
     // borderTopWidth: 1,
@@ -139,6 +147,12 @@ const styles = StyleSheet.create({
   text: {
     color: "#030303",
     fontSize: 17,
+    marginLeft: 40,
+  },
+  arrow: {
+    color: "rgba(0, 0, 0, 0.3)",
+    fontSize: 22,
+    marginRight: 20,
   },
 });
 

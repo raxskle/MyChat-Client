@@ -46,7 +46,7 @@ export const userSlice = createSlice({
         name: string;
       }>
     ) => {
-      console.log(state, action.payload);
+      state.user.name = action.payload.name;
     },
     changeUserAvator: (
       state,

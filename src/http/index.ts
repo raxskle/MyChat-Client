@@ -65,6 +65,7 @@ export const addFriend = async (userId: string, friendId: string) => {
   return response;
 };
 
+// 修改头像
 export const uploadAvator = async (data) => {
   const response = await fetch(`${base}/upload_avator`, {
     method: "POST",
@@ -82,4 +83,20 @@ export const uploadAvator = async (data) => {
 
   console.log("http:uploadAvator:", response);
   return response.data;
+};
+
+// 修改名字
+export const updateName = async (name: string, id: string) => {
+  const response = await fetch(`${base}/update_name?id=${id}&name=${name}`, {
+    method: "GET",
+  })
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log("updateName错误");
+      return err;
+    });
+
+  console.log("http:updateName:", response);
+
+  return response;
 };
