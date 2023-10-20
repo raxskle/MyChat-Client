@@ -13,13 +13,10 @@ interface WhiteChatProps {
   avator: string;
 }
 
-function WhiteChat({ chat }: WhiteChatProps): JSX.Element {
+function WhiteChat({ chat, avator }: WhiteChatProps): JSX.Element {
   return (
     <View style={styles.chat}>
-      <Image
-        style={styles.avator}
-        source={{ uri: "https://demo.raxskle.fun/mie.png" }}
-      />
+      <Image style={styles.avator} source={{ uri: avator }} />
 
       <View style={styles.bubble}>
         <Text style={styles.text}>{chat.content}</Text>

@@ -29,10 +29,7 @@ function ChatItem({ navigation, friendId, chat }: ChatItemProps): JSX.Element {
       }}
     >
       <View style={styles.item}>
-        <Image
-          style={styles.avator}
-          source={{ uri: "https://demo.raxskle.fun/mie.png" }}
-        />
+        <Image style={styles.avator} source={{ uri: info?.avator }} />
 
         <View style={styles.main}>
           <View style={styles.data}>

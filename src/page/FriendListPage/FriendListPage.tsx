@@ -119,7 +119,7 @@ function FriendPage({ navigation }: NavigationProps): JSX.Element {
                 </Text>
               )}
               <FriendItem
-                avator={{ uri: "https://demo.raxskle.fun/mie.png" }}
+                avator={{ uri: item.avator }}
                 name={item.name}
                 handlePress={() => toFriendProfilePage(item)}
               />

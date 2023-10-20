@@ -31,7 +31,7 @@ interface GreenChatProps {
   avator: string;
 }
 
-function GreenChat({ chat }: GreenChatProps): JSX.Element {
+function GreenChat({ chat, avator }: GreenChatProps): JSX.Element {
   return (
     <View style={styles.chat}>
       <View style={styles.bubble}>
@@ -39,10 +39,7 @@ function GreenChat({ chat }: GreenChatProps): JSX.Element {
         <View style={styles.triangle} />
       </View>
 
-      <Image
-        style={styles.avator}
-        source={{ uri: "https://demo.raxskle.fun/mie.png" }}
-      />
+      <Image style={styles.avator} source={{ uri: avator }} />
     </View>
   );
 }

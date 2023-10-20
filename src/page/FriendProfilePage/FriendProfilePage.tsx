@@ -39,10 +39,7 @@ function FriendProfilePage({
   return (
     <View style={styles.container}>
       <View style={styles.friend}>
-        <Image
-          style={styles.avator}
-          source={{ uri: "https://demo.raxskle.fun/mie.png" }}
-        />
+        <Image style={styles.avator} source={{ uri: friendInfo.avator }} />
         <View>
           <Text style={styles.name}>{friendInfo.name}</Text>
           <Text style={styles.id}>微信号：{friendInfo.id}</Text>

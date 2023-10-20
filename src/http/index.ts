@@ -1,21 +1,21 @@
-import {Alert} from 'react-native';
+import { Alert } from "react-native";
 
 // 使用fetch即可
-const base = 'https://demo.raxskle.fun/api';
+const base = "https://demo.raxskle.fun/api";
 
 // 使用id和password获取用户信息
 // 登陆时调用
 export const getUserInfo = async (id: string, password: string) => {
   const user = await fetch(`${base}/login?id=${id}&password=${password}`, {
-    method: 'GET',
+    method: "GET",
   })
-    .then(res => res.json())
-    .catch(err => {
-      console.log('getUserInfo错误');
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log("getUserInfo错误");
       return err;
     });
 
-  console.log('http:getUserInfo:', user);
+  console.log("http:getUserInfo:", user);
   if (!user.data) {
     // 没返回数据
     Alert.alert(user.msg);
@@ -29,16 +29,16 @@ export const getFriendInfo = async (idList: string[]) => {
   const friends = await fetch(
     `${base}/get_friend_info?friends=${JSON.stringify(idList)}`,
     {
-      method: 'GET',
-    },
+      method: "GET",
+    }
   )
-    .then(res => res.json())
-    .catch(err => {
-      console.log('getFriendInfo错误');
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log("getFriendInfo错误");
       return err;
     });
 
-  console.log('http:getFriendInfo:', friends);
+  console.log("http:getFriendInfo:", friends);
   if (!friends.data) {
     // 没返回数据
     Alert.alert(friends.msg);
@@ -52,15 +52,34 @@ export const getFriendInfo = async (idList: string[]) => {
 export const addFriend = async (userId: string, friendId: string) => {
   const response = await fetch(
     `${base}/add_friend?user_id=${userId}&friend_id=${friendId}`,
-    {method: 'GET'},
+    { method: "GET" }
   )
-    .then(res => res.json())
-    .catch(err => {
-      console.log('addFriend错误');
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log("addFriend错误");
       return err;
     });
 
-  console.log('http:addFriend:', response.msg);
+  console.log("http:addFriend:", response.msg);
 
   return response;
+};
+
+export const uploadAvator = async (data) => {
+  const response = await fetch(`${base}/upload_avator`, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log("uploadAvator错误: ", err);
+      return err;
+    });
+
+  console.log("http:uploadAvator:", response);
+  return response.data;
 };

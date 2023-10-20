@@ -1,21 +1,21 @@
-import React, {useState} from 'react';
-import {Alert, Image, StyleSheet, Text, TextInput, View} from 'react-native';
-import {NavigationProps} from '../../utils/types';
+import React, { useState } from "react";
+import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { NavigationProps } from "../../utils/types";
 
-import {useSelector} from 'react-redux';
-import type {RootState} from '../../store/index';
+import { useSelector } from "react-redux";
+import type { RootState } from "../../store/index";
 
-import {Dimensions} from 'react-native';
-import {getFriendInfo} from '../../http';
-import PressableWithStyle from '../../components/PressableWithStyle';
+import { Dimensions } from "react-native";
+import { getFriendInfo } from "../../http";
+import PressableWithStyle from "../../components/PressableWithStyle";
 
-const window = Dimensions.get('window');
+const window = Dimensions.get("window");
 
 // 搜索friend页面
-function AddFriendPage({navigation}: NavigationProps): JSX.Element {
-  const [searchText, setSearchText] = useState('');
+function AddFriendPage({ navigation }: NavigationProps): JSX.Element {
+  const [searchText, setSearchText] = useState("");
 
-  const [status, setStatus] = useState<'blur' | 'texting' | 'notFound'>('blur');
+  const [status, setStatus] = useState<"blur" | "texting" | "notFound">("blur");
 
   const userId = useSelector((state: RootState) => state.user.user.id);
 
@@ -23,11 +23,11 @@ function AddFriendPage({navigation}: NavigationProps): JSX.Element {
     const friend = await getFriendInfo([searchText]);
     console.log(friend);
     if (friend.length === 0) {
-      setStatus('notFound');
+      setStatus("notFound");
     } else if (friend.length === 1) {
-      navigation.navigate('FriendProfile', friend[0]);
+      navigation.navigate("FriendProfile", friend[0]);
     } else {
-      Alert.alert('搜索出错，请重试');
+      Alert.alert("搜索出错，请重试");
     }
   };
 
@@ -36,32 +36,32 @@ function AddFriendPage({navigation}: NavigationProps): JSX.Element {
       <View style={styles.searchBar}>
         <Image
           style={styles.searchIcon}
-          source={require('../../assets/SearchIcon.png')}
+          source={require("../../assets/SearchIcon.png")}
         />
         <TextInput
           style={styles.input}
           value={searchText}
           placeholder="搜索账号"
-          onChangeText={newText => {
+          onChangeText={(newText) => {
             setSearchText(newText);
-            setStatus('texting');
+            setStatus("texting");
           }}
         />
       </View>
 
-      {status === 'texting' && searchText !== '' && (
+      {status === "texting" && searchText !== "" && (
         <PressableWithStyle onPress={search}>
           <View style={styles.addBox}>
             <Image
               style={styles.addIcon}
-              source={require('../../assets/AddFriend.png')}
+              source={require("../../assets/AddFriend.png")}
             />
             <Text style={styles.addText}>搜索:{searchText}</Text>
           </View>
         </PressableWithStyle>
       )}
 
-      {status === 'notFound' && (
+      {status === "notFound" && (
         <View style={styles.notFoundBox}>
           <Text>该用户不存在</Text>
         </View>
@@ -74,23 +74,23 @@ function AddFriendPage({navigation}: NavigationProps): JSX.Element {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F3F3F3',
+    backgroundColor: "#F3F3F3",
     width: window.width,
     flex: 1,
     marginHorizontal: 0,
     marginVertical: 0,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "center",
     marginTop: 50,
   },
   searchBar: {
     width: window.width * 0.95,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
     borderRadius: 8,
     marginTop: 6,
     marginBottom: 6,
@@ -110,24 +110,24 @@ const styles = StyleSheet.create({
   addBox: {
     width: window.width,
     height: 60,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
 
   addIcon: {
     width: 40,
     height: 40,
     margin: 10,
-    backgroundColor: 'green',
+    backgroundColor: "green",
   },
   addText: {},
   notFoundBox: {
     height: 100,
     width: window.width,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
   },
   myId: {
     marginTop: 10,

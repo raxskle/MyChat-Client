@@ -132,9 +132,9 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
                   </Text>
                 ))}
               {item.userid === user.id ? (
-                <GreenChat chat={item} avator={""} />
+                <GreenChat chat={item} avator={user.avator} />
               ) : (
-                <WhiteChat chat={item} avator={""} />
+                <WhiteChat chat={item} avator={friendInfo.avator} />
               )}
             </View>
           );
