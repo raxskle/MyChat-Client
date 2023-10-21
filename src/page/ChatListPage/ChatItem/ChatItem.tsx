@@ -1,6 +1,12 @@
 import React from "react";
 
-import { View, StyleSheet, Text, Image } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  ImageSourcePropType,
+} from "react-native";
 
 import { Dimensions } from "react-native";
 import { NavigationProps } from "../../../utils/types";
@@ -13,18 +19,27 @@ const window = Dimensions.get("window");
 
 interface ChatItemProps extends NavigationProps {
   chat: ChatType[];
-  friendId: string;
+  friendId?: string;
+  name: string;
+  avator: ImageSourcePropType;
+  groupId?: string;
 }
 
-function ChatItem({ navigation, friendId, chat }: ChatItemProps): JSX.Element {
-  const AllFriends = useSelector((state: RootState) => state.friend.data);
-  const info = AllFriends.find((item) => item.id === friendId);
-
+function ChatItem({
+  navigation,
+  friendId,
+  groupId,
+  chat,
+  name,
+  avator,
+}: ChatItemProps): JSX.Element {
   const lastMsg = chat.length > 0 ? chat[chat.length - 1] : undefined;
 
   const renderLastMsg = (lastMsg: ChatType) => {
     if (!lastMsg) {
-      return `你已添加了${info?.name}，现在可以开始聊天了!`;
+      return groupId
+        ? `你已加入了群聊 ${name}，现在可以开始聊天了!`
+        : `你已添加了 ${name}，现在可以开始聊天了!`;
     }
 
     if (lastMsg.type === "text") {
@@ -37,16 +52,19 @@ function ChatItem({ navigation, friendId, chat }: ChatItemProps): JSX.Element {
   return (
     <PressableWithStyle
       onPress={() => {
-        navigation.navigate("Chat", { friendId });
+        if (friendId) {
+          // 私聊
+          navigation.navigate("Chat", { friendId });
+        }
       }}
     >
       <View style={styles.item}>
-        <Image style={styles.avator} source={{ uri: info?.avator }} />
+        <Image style={styles.avator} source={avator} />
 
         <View style={styles.main}>
           <View style={styles.data}>
             <Text style={styles.name} numberOfLines={1}>
-              {info?.name}
+              {name}
             </Text>
             <Text style={styles.msg} numberOfLines={1}>
               {renderLastMsg(lastMsg)}
@@ -74,7 +92,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 6,
-    backgroundColor: "green",
+
     margin: 10,
   },
   main: {

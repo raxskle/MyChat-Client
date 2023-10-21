@@ -15,6 +15,11 @@ function ChatListPage({ navigation }: NavigationProps): JSX.Element {
 
   const friendList = useSelector((state: RootState) => state.friend.data);
 
+  const groupChats =
+    useSelector((state: RootState) => state.user.user.groupChats) || {};
+
+  const groups = useSelector((state: RootState) => state.user.user.groups);
+
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
@@ -30,12 +35,30 @@ function ChatListPage({ navigation }: NavigationProps): JSX.Element {
           return friendList.find((friend) => friend.id === id);
         })
         .map((id) => {
+          const info = friendList.find((item) => item.id === id);
           return (
             <ChatItem
               key={id}
               navigation={navigation}
               chat={chats[id]}
               friendId={id}
+              name={info.name}
+              avator={{ uri: info.avator }}
+            />
+          );
+        })}
+
+      {groupChats &&
+        Object.keys(groupChats).map((id) => {
+          const info = groups.find((item) => item.id === id);
+          return (
+            <ChatItem
+              key={id}
+              navigation={navigation}
+              chat={groupChats[id]}
+              groupId={info.id}
+              name={info.name}
+              avator={require("../../assets/Icon.png")}
             />
           );
         })}
