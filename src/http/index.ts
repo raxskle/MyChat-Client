@@ -101,3 +101,26 @@ export const updateName = async (name: string, id: string) => {
 
   return response;
 };
+
+// 发起群聊
+export const createGroup = async (name: string, member: string[]) => {
+  const response = await fetch(`${base}/create_group`, {
+    method: "POST",
+    body: JSON.stringify({ name: name, member: member }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log("createGroup错误");
+      return err;
+    });
+
+  console.log("http:createGroup:", response);
+
+  // response:
+  // group:{id, name}
+  return response;
+};

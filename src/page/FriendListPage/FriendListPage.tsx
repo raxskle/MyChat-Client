@@ -23,6 +23,10 @@ function FriendPage({ navigation }: NavigationProps): JSX.Element {
     navigation.navigate("AddFriend");
   };
 
+  const toGroupListPage = () => {
+    navigation.navigate("GroupPage");
+  };
+
   const toFriendProfilePage = (friendInfo: FriendInfo) => {
     navigation.navigate("FriendProfile", friendInfo);
   };
@@ -99,7 +103,7 @@ function FriendPage({ navigation }: NavigationProps): JSX.Element {
         <FriendItem
           avator={require("../../assets/Group.png")}
           name={"群聊"}
-          handlePress={toChatPage}
+          handlePress={toGroupListPage}
         />
         <FriendItem
           avator={require("../../assets/Tag.png")}

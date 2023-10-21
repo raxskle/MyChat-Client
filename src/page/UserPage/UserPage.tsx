@@ -66,19 +66,28 @@ function UserPage({
       <PressableWithStyle onPress={pickImage}>
         <View style={styles.item}>
           <Text style={styles.text}>头像</Text>
-          <Text style={styles.arrow}>{">"}</Text>
+          <Image
+            style={styles.arrow}
+            source={require("../../assets/ArrowRight.png")}
+          />
         </View>
       </PressableWithStyle>
       <PressableWithStyle onPress={setName}>
         <View style={styles.item}>
           <Text style={styles.text}>名字</Text>
-          <Text style={styles.arrow}>{">"}</Text>
+          <Image
+            style={styles.arrow}
+            source={require("../../assets/ArrowRight.png")}
+          />
         </View>
       </PressableWithStyle>
       <PressableWithStyle>
         <View style={styles.item}>
           <Text style={styles.text}>微信号</Text>
-          <Text style={styles.arrow}>{">"}</Text>
+          <Image
+            style={styles.arrow}
+            source={require("../../assets/ArrowRight.png")}
+          />
         </View>
       </PressableWithStyle>
       <View style={styles.gap} />
@@ -150,8 +159,8 @@ const styles = StyleSheet.create({
     marginLeft: 40,
   },
   arrow: {
-    color: "rgba(0, 0, 0, 0.3)",
-    fontSize: 22,
+    width: 20,
+    height: 20,
     marginRight: 20,
   },
 });

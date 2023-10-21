@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 // redux
 import { Provider, useSelector } from "react-redux";
@@ -11,9 +11,13 @@ import {
   StyleSheet,
   Pressable,
   Image,
+  Text,
+  Modal,
 } from "react-native";
 
 import { Dimensions } from "react-native";
+
+const window = Dimensions.get("window");
 
 // 容器
 import {
@@ -39,6 +43,8 @@ import {
   SettingTextPage,
   SettingTextTopBtn,
 } from "./src/page/SettingTextPage/SettingTextPage";
+import GroupPage from "./src/page/GroupListPage/GroupListPage";
+import TeamUpGroupPage from "./src/page/TeamUpGroupPage/TeamUpGroupPage";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -52,7 +58,14 @@ const DiscoverActiveIcon = require("./src/assets/DiscoverActive.png");
 const UserIcon = require("./src/assets/User.png");
 const UserActiveIcon = require("./src/assets/UserActive.png");
 
+let sharedNavigation = null;
+
 const HeaderButton = () => {
+  const [showAdd, setShowAdd] = useState(false);
+
+  const [press1, setPress1] = useState(false);
+  const [press2, setPress2] = useState(false);
+
   return (
     <View style={styles.headerRight}>
       <Pressable onPress={() => console.log("This is a button!")}>
@@ -61,15 +74,150 @@ const HeaderButton = () => {
           source={require("./src/assets/SearchIcon.png")}
         />
       </Pressable>
-      <Pressable onPress={() => console.log("This is a button!")}>
-        <Image
-          style={styles.headerBtn}
-          source={require("./src/assets/AddIcon.png")}
-        />
-      </Pressable>
+
+      <View>
+        <Pressable
+          onPress={() => {
+            setShowAdd(true);
+          }}
+        >
+          <Image
+            style={styles.headerBtn}
+            source={require("./src/assets/AddIcon.png")}
+          />
+        </Pressable>
+
+        <Modal visible={showAdd} transparent={true}>
+          <Pressable
+            onPress={(e) => {
+              setShowAdd(false);
+            }}
+            style={{ width: window.width, height: window.height }}
+          >
+            <View style={HomeNavBtnStyle.popup}>
+              <Pressable
+                onPressIn={() => {
+                  setPress1(true);
+                }}
+                onPressOut={() => {
+                  setPress1(false);
+                }}
+                onPress={(e) => {
+                  e.stopPropagation();
+                  setPress1(false);
+                  if (sharedNavigation) {
+                    sharedNavigation.navigate("AddFriend");
+                  }
+                  setShowAdd(false);
+                }}
+              >
+                <View
+                  style={[
+                    HomeNavBtnStyle.item,
+                    press1
+                      ? HomeNavBtnStyle.itemPress
+                      : HomeNavBtnStyle.itemDefault,
+                  ]}
+                >
+                  <Image
+                    style={HomeNavBtnStyle.icon}
+                    source={require("./src/assets/AddFriend.png")}
+                  />
+                  <Text style={HomeNavBtnStyle.text}>添加好友</Text>
+                </View>
+              </Pressable>
+
+              <Pressable
+                onPressIn={() => {
+                  setPress2(true);
+                }}
+                onPressOut={() => {
+                  setPress2(false);
+                }}
+                onPress={(e) => {
+                  e.stopPropagation();
+                  setPress2(false);
+                  if (sharedNavigation) {
+                    sharedNavigation.navigate("TeamUpGroup");
+                  }
+                  setShowAdd(false);
+                }}
+              >
+                <View
+                  style={[
+                    HomeNavBtnStyle.item,
+                    press2
+                      ? HomeNavBtnStyle.itemPress
+                      : HomeNavBtnStyle.itemDefault,
+                  ]}
+                >
+                  <Image
+                    style={HomeNavBtnStyle.icon}
+                    source={require("./src/assets/Group.png")}
+                  />
+                  <Text style={HomeNavBtnStyle.text}>创建群组</Text>
+                </View>
+              </Pressable>
+
+              <View style={HomeNavBtnStyle.tip}></View>
+            </View>
+          </Pressable>
+        </Modal>
+      </View>
     </View>
   );
 };
+
+const HomeNavBtnStyle = StyleSheet.create({
+  popup: {
+    position: "absolute",
+    right: 8,
+    top: 64,
+    backgroundColor: "rgba(50,50,50,0.8)",
+    width: 200,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 4,
+  },
+  tip: {
+    position: "absolute",
+    right: 8,
+    top: -18,
+    height: 18,
+    width: 18,
+    borderWidth: 8,
+    borderLeftWidth: 8,
+    borderRightWidth: 8,
+    borderTopColor: "transparent",
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "rgba(50,50,50,0.8)",
+  },
+  item: {
+    width: 200,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    flexDirection: "row",
+    borderBottomWidth: 0.8,
+    borderBottomColor: "rgba(250,250,250,0.1)",
+  },
+  itemPress: {
+    backgroundColor: "rgba(40,40,40,0.2)",
+  },
+  itemDefault: {
+    backgroundColor: "transparent",
+  },
+  icon: {
+    width: 26,
+    height: 26,
+    marginHorizontal: 10,
+  },
+  text: {
+    color: "white",
+    fontSize: 16,
+    paddingVertical: 14,
+  },
+});
 
 const HeaderBland = () => {
   return <View />;
@@ -110,6 +258,10 @@ const Home = ({ navigation }: { navigation: any }) => {
 
   if (user.id === "") {
     navigation.navigate("Login");
+  }
+
+  if (!sharedNavigation) {
+    sharedNavigation = navigation;
   }
 
   useReceiveMsg();
@@ -238,6 +390,26 @@ function App(): JSX.Element {
                 headerRight: SettingTextTopBtn,
                 headerLeft: undefined,
                 headerTransparent: true,
+              }}
+            />
+
+            <Stack.Screen
+              name="GroupPage"
+              component={GroupPage}
+              options={{
+                title: "群聊",
+                headerRight: undefined,
+                headerLeft: undefined,
+              }}
+            />
+
+            <Stack.Screen
+              name="TeamUpGroup"
+              component={TeamUpGroupPage}
+              options={{
+                title: "发起群聊",
+                headerRight: undefined,
+                headerLeft: undefined,
               }}
             />
           </Stack.Navigator>

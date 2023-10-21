@@ -18,15 +18,54 @@ groups: string[]; // 群组 id 数组
 
 添加好友模块
 
-创建群组模块
+群组聊天模块
 
-Groups: Record<string, Group> // 群聊记录集合
+```
+
+Groups: Group[] // 需要根据userId找到他所有群组，也要通过群组Id找到所有member
 
 Group: {
-id: string;
-member: string; // userId
-groupChats: Chat[];
+  id: string;
+  name: string;
+  member: userId[];
+  groupChats: Chat[];
 }
+
+接口：
+
+- 创建群组
+params {
+  member,
+  name,
+}
+
+- 修改群组名字
+
+
+websocket：
+
+- sendGroupMsg
+{
+  id,
+  chat
+}
+
+- receiveGroupMsg
+{
+  id,
+  chat
+}
+
+与私聊同样的做法
+socket上线时，将其放入以groupId为id 的 room 中，
+
+发送消息时，存入数据库，并且通知当前所有在线的群组成员socket
+收到消息更新数据
+
+群组聊天需要存在User的groupChats字段
+
+
+```
 
 即时聊天模块：文字/图片/emoji 聊天，表情系统
 
@@ -35,6 +74,7 @@ Chat {
 time: Date();
 userId: string;
 content: string;
+type: "text" | "image"
 }
 
 搜索记录模块
