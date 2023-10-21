@@ -5,7 +5,7 @@ export interface GroupInfo {
   id: string;
   name: string;
   member: string[];
-  memberInfo?: FriendInfo[];
+  memberInfo?: FriendInfo[]; // 暂时不需要
 }
 
 const initialGroups: { data: GroupInfo[] } = {
@@ -20,9 +20,13 @@ export const groupSlice = createSlice({
     setGroups: (state, action: PayloadAction<{ groups: GroupInfo[] }>) => {
       state.data = action.payload.groups;
     },
+    // 用于在线时增加了group
+    addGroup: (state, action: PayloadAction<{ group: GroupInfo }>) => {
+      state.data.push(action.payload.group);
+    },
   },
 });
 
 //
-export const { setGroups } = groupSlice.actions;
+export const { setGroups, addGroup } = groupSlice.actions;
 export default groupSlice.reducer;

@@ -20,6 +20,7 @@ import { createGroup, getFriendInfo } from "../../http";
 import { NavigationProps } from "../../utils/types";
 import { FriendInfo, setFriends } from "../../store/friendSlice";
 import { updateGroup } from "../../store/userSlice";
+import { addGroup } from "../../store/groupSlice";
 
 const window = Dimensions.get("window");
 
@@ -91,6 +92,8 @@ function TeamUpGroupPage({ navigation }: NavigationProps): JSX.Element {
         dispatch(
           updateGroup({ group: { id: res.data.id, name: res.data.name } })
         );
+        // 新建群组之后需要更新user的groups字段，还需要更新groupSlice数据
+        dispatch(addGroup({ group: res.data }));
       }
 
       navigation.navigate("Home");

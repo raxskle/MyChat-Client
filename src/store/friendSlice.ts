@@ -1,4 +1,4 @@
-import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
+import { type PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface FriendInfo {
   id: string;
@@ -6,22 +6,23 @@ export interface FriendInfo {
   avator: string;
 }
 
-const initialFriends: {data: FriendInfo[]} = {
+const initialFriends: { data: FriendInfo[] } = {
   data: [],
 };
 
 // 记录friend的基本信息
 export const friendSlice = createSlice({
-  name: 'friend',
+  name: "friend",
   initialState: initialFriends,
   reducers: {
     // 加载friend信息
-    setFriends: (state, action: PayloadAction<{friends: FriendInfo[]}>) => {
+    setFriends: (state, action: PayloadAction<{ friends: FriendInfo[] }>) => {
       state.data = action.payload.friends;
     },
+    // 用于在线时增加了朋友
   },
 });
 
 //
-export const {setFriends} = friendSlice.actions;
+export const { setFriends } = friendSlice.actions;
 export default friendSlice.reducer;
