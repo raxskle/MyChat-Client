@@ -119,8 +119,6 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
 
   const inputRef = useRef(null);
 
-  console.log("render");
-
   const images = chat
     .filter((item) => item.type === "image")
     .map((item) => {

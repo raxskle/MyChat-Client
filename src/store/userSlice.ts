@@ -87,6 +87,18 @@ export const userSlice = createSlice({
         state.user.groupChats = { [group.id]: [] };
       }
     },
+    // 增加一个群聊信息
+    updateGroupChatByOne: (
+      state,
+      action: PayloadAction<{ groupId: string; chat: ChatType }>
+    ) => {
+      const { chat, groupId } = action.payload;
+      if (state.user.groupChats) {
+        state.user.groupChats[groupId].push(chat);
+      } else {
+        state.user.groupChats = { [groupId]: [chat] };
+      }
+    },
   },
 });
 
@@ -97,5 +109,6 @@ export const {
   updateChatByOne,
   changeUserAvator,
   updateGroup,
+  updateGroupChatByOne,
 } = userSlice.actions;
 export default userSlice.reducer;

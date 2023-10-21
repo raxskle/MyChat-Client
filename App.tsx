@@ -45,6 +45,7 @@ import {
 } from "./src/page/SettingTextPage/SettingTextPage";
 import GroupPage from "./src/page/GroupListPage/GroupListPage";
 import TeamUpGroupPage from "./src/page/TeamUpGroupPage/TeamUpGroupPage";
+import GroupChatPage from "./src/page/GroupChatPage/GroupChatPage";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -408,6 +409,16 @@ function App(): JSX.Element {
               component={TeamUpGroupPage}
               options={{
                 title: "发起群聊",
+                headerRight: undefined,
+                headerLeft: undefined,
+              }}
+            />
+
+            <Stack.Screen
+              name="GroupChat"
+              component={GroupChatPage}
+              options={{
+                title: "群聊",
                 headerRight: undefined,
                 headerLeft: undefined,
               }}

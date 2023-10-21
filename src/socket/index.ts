@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import io from "socket.io-client";
-import { updateChatByOne } from "../store/userSlice";
+import { updateChatByOne, updateGroupChatByOne } from "../store/userSlice";
 import { useEffect } from "react";
 
 const socket = io("https://demo.raxskle.fun", {});
@@ -25,8 +25,16 @@ export const useReceiveMsg = () => {
       dispatch(updateChatByOne({ friendId: data.friendId, chat: data.chat }));
     });
 
+    socket.on("receiveGroupMsg", (data) => {
+      console.log("socket:receiveGroupMsg:", data);
+      dispatch(
+        updateGroupChatByOne({ groupId: data.groupId, chat: data.chat })
+      );
+    });
+
     return () => {
       socket.off("receiveMsg");
+      socket.off("receiveGroupMsg");
     };
   }, [dispatch]);
 };
@@ -55,4 +63,16 @@ interface Msg {
 export const sendMsg = (data: Msg) => {
   socket.emit("sendMsg", data);
   console.log("socket:sendMsg:", data);
+};
+
+interface GroupMsg {
+  groupId: string;
+  speaker: string;
+  content: string;
+  type: "text" | "image";
+}
+
+export const sendGroupMsg = (data: GroupMsg) => {
+  socket.emit("sendGroupMsg", data);
+  console.log("socket:sendGroupMsg:", data);
 };

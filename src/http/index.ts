@@ -15,7 +15,7 @@ export const getUserInfo = async (id: string, password: string) => {
       return err;
     });
 
-  console.log("http:getUserInfo:", user);
+  console.log("http:getUserInfo:", user.msg);
   if (!user.data) {
     // 没返回数据
     Alert.alert(user.msg);
@@ -38,7 +38,7 @@ export const getFriendInfo = async (idList: string[]) => {
       return err;
     });
 
-  console.log("http:getFriendInfo:", friends);
+  console.log("http:getFriendInfo:");
   if (!friends.data) {
     // 没返回数据
     Alert.alert(friends.msg);
@@ -123,4 +123,21 @@ export const createGroup = async (name: string, member: string[]) => {
   // response:
   // group:{id, name}
   return response;
+};
+
+// 获取群组信息，包括member
+export const getGroupInfo = async (idList: string[]) => {
+  const ids = JSON.stringify(idList);
+  const groupInfo = await fetch(`${base}/get_group_info?groups=${ids}`, {
+    method: "GET",
+  })
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log("getGroupInfo错误");
+      return err;
+    });
+
+  console.log("http:getGroupInfo:", groupInfo);
+
+  return groupInfo;
 };

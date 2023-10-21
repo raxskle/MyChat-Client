@@ -6,21 +6,23 @@ import { Dimensions } from "react-native";
 import { ChatType } from "../../../store/userSlice";
 const window = Dimensions.get("window");
 
-// const sample = 'Y😄';
-
 interface WhiteChatProps {
   chat: ChatType;
   avator: string;
+  name?: string;
 }
 
-function WhiteChat({ chat, avator }: WhiteChatProps): JSX.Element {
+function WhiteChat({ chat, avator, name }: WhiteChatProps): JSX.Element {
   return (
     <View style={styles.chat}>
       <Image style={styles.avator} source={{ uri: avator }} />
 
-      <View style={styles.bubble}>
-        <Text style={styles.text}>{chat.content}</Text>
-        <View style={styles.triangle} />
+      <View style={styles.content}>
+        {name && <Text style={styles.name}>{name}</Text>}
+        <View style={styles.bubble}>
+          <Text style={styles.text}>{chat.content}</Text>
+          <View style={styles.triangle} />
+        </View>
       </View>
     </View>
   );
@@ -34,7 +36,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   bubble: {
-    marginTop: 12,
     padding: 10,
     paddingLeft: 12,
     paddingRight: 12,
@@ -67,6 +68,15 @@ const styles = StyleSheet.create({
     backgroundColor: "green",
     margin: 12,
     marginBottom: 0,
+  },
+  content: {
+    flexDirection: "column",
+    marginTop: 12,
+  },
+  name: {
+    padding: 0,
+    fontSize: 14,
+    color: "rgba(0,0,0,0.3)",
   },
 });
 

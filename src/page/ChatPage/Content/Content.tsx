@@ -57,7 +57,7 @@ const Content = forwardRef<ScrollView, ContentParams>(
             <ImageChat
               onPress={() => ZoomImage(item.content)}
               chat={item}
-              avator={user.avator}
+              avator={friendInfo.avator}
               isUser={false}
             />
           );

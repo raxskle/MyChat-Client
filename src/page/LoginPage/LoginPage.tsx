@@ -14,10 +14,11 @@ import {
 import { useDispatch } from "react-redux";
 
 import { Dimensions } from "react-native";
-import { getFriendInfo, getUserInfo } from "../../http";
+import { getFriendInfo, getGroupInfo, getUserInfo } from "../../http";
 import { setUser } from "../../store/userSlice";
 import { setFriends } from "../../store/friendSlice";
 import { compare } from "pinyin";
+import { setGroups } from "../../store/groupSlice";
 
 const window = Dimensions.get("window");
 
@@ -99,6 +100,18 @@ function LoginPage({ navigation }: { navigation: any }): JSX.Element {
                 ),
               })
             );
+
+            const groupInfoList = await getGroupInfo(
+              user.groups.map((group) => group.id)
+            );
+            console.log("get群组信息", groupInfoList);
+            if (groupInfoList.data) {
+              dispatch(
+                setGroups({
+                  groups: groupInfoList.data,
+                })
+              );
+            }
 
             // 跳转进入
             setModalVisible(false);

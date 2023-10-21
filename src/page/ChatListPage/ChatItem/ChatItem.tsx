@@ -37,9 +37,9 @@ function ChatItem({
 
   const renderLastMsg = (lastMsg: ChatType) => {
     if (!lastMsg) {
-      return groupId
-        ? `你已加入了群聊 ${name}，现在可以开始聊天了!`
-        : `你已添加了 ${name}，现在可以开始聊天了!`;
+      return friendId
+        ? `你已添加了 ${name}，现在可以开始聊天了!`
+        : `你已加入了群聊 ${name}，现在可以开始聊天了!`;
     }
 
     if (lastMsg.type === "text") {
@@ -55,6 +55,8 @@ function ChatItem({
         if (friendId) {
           // 私聊
           navigation.navigate("Chat", { friendId });
+        } else if (groupId) {
+          navigation.navigate("GroupChat", { groupId });
         }
       }}
     >

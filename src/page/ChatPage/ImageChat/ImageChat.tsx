@@ -14,6 +14,7 @@ interface ImageChatProps {
   avator: string;
   isUser: boolean;
   onPress: any;
+  name?: string;
 }
 
 interface ImageSize {
@@ -50,6 +51,7 @@ function ImageChat({
   avator,
   isUser,
   onPress,
+  name,
 }: ImageChatProps): JSX.Element {
   const [size, setSize] = useState<ImageSize>();
 
@@ -61,13 +63,16 @@ function ImageChat({
 
   return (
     <View style={[styles.chat, isUser ? styles.UserChat : styles.FriendChat]}>
-      <View style={styles.bubble}>
-        <Pressable onPress={onPress}>
-          <Image
-            style={[styles.image, resize(size)]}
-            source={{ uri: chat.content }}
-          />
-        </Pressable>
+      <View style={styles.content}>
+        {name && <Text style={styles.name}>{name}</Text>}
+        <View style={styles.bubble}>
+          <Pressable onPress={onPress}>
+            <Image
+              style={[styles.image, resize(size)]}
+              source={{ uri: chat.content }}
+            />
+          </Pressable>
+        </View>
       </View>
 
       <Image style={styles.avator} source={{ uri: avator }} />
@@ -88,7 +93,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   bubble: {
-    marginTop: 12,
     overflow: "hidden",
     borderRadius: 6,
   },
@@ -105,6 +109,15 @@ const styles = StyleSheet.create({
     backgroundColor: "green",
     margin: 12,
     marginBottom: 0,
+  },
+  content: {
+    flexDirection: "column",
+    marginTop: 12,
+  },
+  name: {
+    padding: 0,
+    fontSize: 14,
+    color: "rgba(0,0,0,0.3)",
   },
 });
 
