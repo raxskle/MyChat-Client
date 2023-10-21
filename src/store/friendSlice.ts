@@ -1,5 +1,5 @@
 import { type PayloadAction, createSlice } from "@reduxjs/toolkit";
-
+import { compare } from "pinyin";
 export interface FriendInfo {
   id: string;
   name: string;
@@ -20,9 +20,14 @@ export const friendSlice = createSlice({
       state.data = action.payload.friends;
     },
     // 用于在线时增加了朋友
+    addFriend: (state, action: PayloadAction<{ friend: FriendInfo }>) => {
+      state.data.push(action.payload.friend);
+      state.data.sort((a, b) => compare(a.name, b.name));
+      console.log("friendSlce更新", state.data);
+    },
   },
 });
 
 //
-export const { setFriends } = friendSlice.actions;
+export const { setFriends, addFriend } = friendSlice.actions;
 export default friendSlice.reducer;

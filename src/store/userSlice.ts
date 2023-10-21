@@ -62,6 +62,29 @@ export const userSlice = createSlice({
     ) => {
       state.user.avator = action.payload.avator;
     },
+    // 更新friends字段数组
+    updateFriend: (
+      state,
+      action: PayloadAction<{
+        friend: string[];
+      }>
+    ) => {
+      state.user.friends = action.payload.friend;
+    },
+    // 增加一个朋友
+    addOneFriend: (
+      state,
+      action: PayloadAction<{
+        friend: string;
+      }>
+    ) => {
+      state.user.friends.push(action.payload.friend);
+      if (state.user.chats) {
+        state.user.chats[action.payload.friend] = [];
+      } else {
+        state.user.chats = { [action.payload.friend]: [] };
+      }
+    },
     // 增加一个聊天信息
     updateChatByOne: (
       state,
@@ -110,5 +133,7 @@ export const {
   changeUserAvator,
   updateGroup,
   updateGroupChatByOne,
+  updateFriend,
+  addOneFriend,
 } = userSlice.actions;
 export default userSlice.reducer;

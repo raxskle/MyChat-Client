@@ -38,7 +38,7 @@ export const getFriendInfo = async (idList: string[]) => {
       return err;
     });
 
-  console.log("http:getFriendInfo:");
+  console.log("http:getFriendInfo:", friends);
   if (!friends.data) {
     // 没返回数据
     Alert.alert(friends.msg);

@@ -85,13 +85,14 @@ function LoginPage({ navigation }: { navigation: any }): JSX.Element {
         onPress={async () => {
           if (id !== "" && password !== "") {
             setModalVisible(true);
+            // 获取user信息
             const user = await getUserInfo(id, password);
             if (!user) {
               Alert.alert("登陆失败");
               return;
             }
             dispatch(setUser({ user }));
-
+            // 获取friends信息
             const friendInfoList = await getFriendInfo(user.friends);
             dispatch(
               setFriends({
@@ -100,11 +101,10 @@ function LoginPage({ navigation }: { navigation: any }): JSX.Element {
                 ),
               })
             );
-
+            // 获取groups信息
             const groupInfoList = await getGroupInfo(
               user.groups.map((group) => group.id)
             );
-            console.log("get群组信息", groupInfoList);
             if (groupInfoList.data) {
               dispatch(
                 setGroups({

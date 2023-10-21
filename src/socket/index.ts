@@ -1,7 +1,15 @@
 import { useDispatch } from "react-redux";
 import io from "socket.io-client";
-import { updateChatByOne, updateGroupChatByOne } from "../store/userSlice";
+import {
+  addOneFriend,
+  updateChatByOne,
+  updateFriend,
+  updateGroup,
+  updateGroupChatByOne,
+} from "../store/userSlice";
 import { useEffect } from "react";
+import { addGroup } from "../store/groupSlice";
+import { addFriend } from "../store/friendSlice";
 
 const socket = io("https://demo.raxskle.fun", {});
 
@@ -18,8 +26,6 @@ export const useReceiveMsg = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("set socket.on('receiveMsg')");
-
     socket.on("receiveMsg", (data) => {
       console.log("socket:receiveMsg:", data);
       dispatch(updateChatByOne({ friendId: data.friendId, chat: data.chat }));
@@ -32,9 +38,32 @@ export const useReceiveMsg = () => {
       );
     });
 
+    // 通知加入群组
+    socket.on("addGroup", (data) => {
+      console.log("socket:addGroup:", data);
+      // 更新user.groups字段
+      dispatch(updateGroup({ group: { id: data.id, name: data.name } }));
+      // 还需要更新groupSlice数据
+      dispatch(addGroup({ group: data }));
+    });
+
+    // 通知新增朋友: 该接口仅被动加好友，主动加好友不会触发，而是通过http响应时更新数据
+    socket.on("addFriend", (data) => {
+      console.log("socket:addFriend:", data);
+      // 新增朋友需要更新user.friends字段和user.chats字段和friendSlice数据
+      dispatch(addOneFriend({ friend: data.id }));
+
+      dispatch(
+        addFriend({
+          friend: data,
+        })
+      );
+    });
+
     return () => {
       socket.off("receiveMsg");
       socket.off("receiveGroupMsg");
+      socket.off("addGroup");
     };
   }, [dispatch]);
 };

@@ -88,13 +88,14 @@ function TeamUpGroupPage({ navigation }: NavigationProps): JSX.Element {
     if (groupName.length > 0 && selectList.length > 0) {
       const res = await createGroup(groupName, [userId, ...selectList]);
 
-      if (res.data) {
-        dispatch(
-          updateGroup({ group: { id: res.data.id, name: res.data.name } })
-        );
-        // 新建群组之后需要更新user的groups字段，还需要更新groupSlice数据
-        dispatch(addGroup({ group: res.data }));
-      }
+      // socket会通知群组中所有人包括自己addGroup
+      // if (res.data) {
+      //   dispatch(
+      //     updateGroup({ group: { id: res.data.id, name: res.data.name } })
+      //   );
+      //   // 新建群组之后需要更新user的groups字段，还需要更新groupSlice数据
+      //   dispatch(addGroup({ group: res.data }));
+      // }
 
       navigation.navigate("Home");
     }

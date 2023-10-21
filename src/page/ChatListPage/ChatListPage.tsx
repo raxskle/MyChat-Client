@@ -20,6 +20,9 @@ function ChatListPage({ navigation }: NavigationProps): JSX.Element {
 
   const groups = useSelector((state: RootState) => state.user.user.groups);
 
+  console.log("ChatListPage friendInfoList", friendList);
+
+  console.log("ChatListPage chats", chats);
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"

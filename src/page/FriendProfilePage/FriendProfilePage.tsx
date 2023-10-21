@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../store/index";
 
 import { Dimensions } from "react-native";
-
-import { addFriend } from "../../http";
-import { setUser } from "../../store/userSlice";
-import { FriendInfo } from "../../store/friendSlice";
+import { compare } from "pinyin";
+import { addFriend, getFriendInfo } from "../../http";
+import { addOneFriend, setUser, updateFriend } from "../../store/userSlice";
+import { FriendInfo, setFriends } from "../../store/friendSlice";
 import PressableWithStyle from "../../components/PressableWithStyle";
 
 const window = Dimensions.get("window");
@@ -66,11 +66,22 @@ function FriendProfilePage({
         </PressableWithStyle>
       ) : (
         <PressableWithStyle
-          onPress={() => {
-            addFriend(userId, friendInfo.id).then((res) => {
-              Alert.alert(res.msg);
-              dispatch(setUser({ user: res.data }));
-            });
+          onPress={async () => {
+            const res = await addFriend(userId, friendInfo.id);
+            Alert.alert(res.msg);
+            // dispatch(setUser({ user: res.data }));
+            // 新增朋友需要更新user.friends字段和friendSlice数据
+            console.log("addfriend 返回user", res.data);
+            dispatch(addOneFriend({ friend: friendInfo.id }));
+            // 获取friends信息
+            const friendInfoList = await getFriendInfo(res.data.friends);
+            dispatch(
+              setFriends({
+                friends: [...friendInfoList].sort((a, b) =>
+                  compare(a.name, b.name)
+                ),
+              })
+            );
           }}
         >
           <View style={styles.item}>
