@@ -57,8 +57,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "transparent",
   },
   text: {
-    fontSize: 16,
-    lineHeight: 20,
+    fontSize: 17,
     color: "#161616",
   },
   avator: {

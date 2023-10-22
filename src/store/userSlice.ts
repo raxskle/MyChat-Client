@@ -11,6 +11,7 @@ export interface ChatType {
   userid: string;
   content: string;
   type: "text" | "image";
+  loading?: boolean; // 仅在本地发送消息等待receiveMsg时为true
 }
 
 export interface User {
@@ -92,7 +93,19 @@ export const userSlice = createSlice({
     ) => {
       const { chat, friendId } = action.payload;
       if (state.user.chats) {
-        state.user.chats[friendId].push(chat);
+        const index = state.user.chats[friendId].findIndex(
+          (c) =>
+            c.loading === true &&
+            c.content === chat.content &&
+            c.userid === chat.userid &&
+            c.type === chat.type
+        );
+        if (index != -1) {
+          // 找到对应
+          state.user.chats[friendId].splice(index, 1, chat);
+        } else {
+          state.user.chats[friendId].push(chat);
+        }
       } else {
         state.user.chats = { [friendId]: [chat] };
       }

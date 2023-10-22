@@ -115,7 +115,7 @@ function GroupChatPage({ route, navigation }: NavigationProps): JSX.Element {
 
     if (!result.canceled) {
       // 拿到pick的图片
-      console.log(result.assets[0].type);
+      // console.log(result.assets[0].type);
       const base64URI = "data:image/png;base64," + result.assets[0].base64;
 
       sendGroupMsg({

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { View, StyleSheet, Text, Image } from "react-native";
 
@@ -6,37 +6,32 @@ import { Dimensions } from "react-native";
 import { ChatType } from "../../../store/userSlice";
 const window = Dimensions.get("window");
 
-// const sample = `You see the world is out there
-// waiting for me
-// That's why I wanna be
-// as free as can be!
-
-// I know that you've been good
-// and You've been sweet,
-// so don't put up a fight,
-// Just let it be!
-
-//  well, I hope one day,
-// While I'm missing you.
-// And so will you
-// be Thinking of me!
-
-// Then we can be together,
-// To laugh about the past,
-// but the love is Still there
-// for you and me`;
-
 interface GreenChatProps {
   chat: ChatType;
   avator: string;
+  loading?: boolean;
 }
 
-function GreenChat({ chat, avator }: GreenChatProps): JSX.Element {
+function GreenChat({ chat, avator, loading }: GreenChatProps): JSX.Element {
+  const [delayLoading, setDelayLoading] = useState(false);
+  // 当loading发送超过500ms，则显示loading图标
+  if (loading) {
+    setTimeout(() => {
+      setDelayLoading(true);
+    }, 500);
+  }
+
   return (
     <View style={styles.chat}>
       <View style={styles.bubble}>
         <Text style={styles.text}>{chat.content}</Text>
         <View style={styles.triangle} />
+        {delayLoading && (
+          <Image
+            source={require("../../../assets/Loading.png")}
+            style={styles.circle}
+          />
+        )}
       </View>
 
       <Image style={styles.avator} source={{ uri: avator }} />
@@ -74,8 +69,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "transparent",
   },
   text: {
-    fontSize: 16,
-    lineHeight: 20,
+    fontSize: 17,
     color: "#161616",
   },
   avator: {
@@ -85,6 +79,13 @@ const styles = StyleSheet.create({
     backgroundColor: "green",
     margin: 12,
     marginBottom: 0,
+  },
+  circle: {
+    position: "absolute",
+    left: -25,
+    top: 10,
+    width: 20,
+    height: 20,
   },
 });
 

@@ -71,7 +71,7 @@ function FriendProfilePage({
             Alert.alert(res.msg);
             // dispatch(setUser({ user: res.data }));
             // 新增朋友需要更新user.friends字段和friendSlice数据
-            console.log("addfriend 返回user", res.data);
+            // console.log("addfriend 返回user", res.data);
             dispatch(addOneFriend({ friend: friendInfo.id }));
             // 获取friends信息
             const friendInfoList = await getFriendInfo(res.data.friends);

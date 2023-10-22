@@ -20,9 +20,51 @@ function ChatListPage({ navigation }: NavigationProps): JSX.Element {
 
   const groups = useSelector((state: RootState) => state.user.user.groups);
 
-  console.log("ChatListPage friendInfoList", friendList);
+  const sortedChatList = () => {
+    const chatList = Object.keys(chats)
+      .filter((id) => {
+        // 即使在chats字段中存在该用户，还需要数据库中存在该用户的信息，才会显示
+        return friendList.find((friend) => friend.id === id);
+      })
+      .map((id) => {
+        const info = friendList.find((item) => item.id === id);
+        return {
+          time: chats[id][chats[id].length - 1]?.time || "0",
+          element: (
+            <ChatItem
+              key={id}
+              navigation={navigation}
+              chat={chats[id]}
+              friendId={id}
+              name={info.name}
+              avator={{ uri: info.avator }}
+            />
+          ),
+        };
+      });
 
-  console.log("ChatListPage chats", chats);
+    const groupChatList = Object.keys(groupChats).map((id) => {
+      const info = groups.find((item) => item.id === id);
+      return {
+        time: groupChats[id][groupChats[id].length - 1]?.time || "0",
+        element: (
+          <ChatItem
+            key={id}
+            navigation={navigation}
+            chat={groupChats[id]}
+            groupId={info.id}
+            name={info.name}
+            avator={require("../../assets/Icon.png")}
+          />
+        ),
+      };
+    });
+
+    return [...chatList, ...groupChatList]
+      .sort((a, b) => Number(b.time) - Number(a.time))
+      .map((item) => item.element);
+  };
+
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
@@ -32,7 +74,7 @@ function ChatListPage({ navigation }: NavigationProps): JSX.Element {
       }}
       style={styles.container}
     >
-      {Object.keys(chats)
+      {/* {Object.keys(chats)
         .filter((id) => {
           // 即使在chats字段中存在该用户，还需要数据库中存在该用户的信息，才会显示
           return friendList.find((friend) => friend.id === id);
@@ -64,7 +106,9 @@ function ChatListPage({ navigation }: NavigationProps): JSX.Element {
               avator={require("../../assets/Icon.png")}
             />
           );
-        })}
+        })} */}
+
+      {sortedChatList()}
     </ScrollView>
   );
 }

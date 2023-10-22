@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
 import {
   addOneFriend,
@@ -10,6 +10,7 @@ import {
 import { useEffect } from "react";
 import { addGroup } from "../store/groupSlice";
 import { addFriend } from "../store/friendSlice";
+import { RootState } from "../store";
 
 const socket = io("https://demo.raxskle.fun", {});
 

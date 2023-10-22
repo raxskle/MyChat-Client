@@ -15,7 +15,7 @@ import {
 import { Dimensions } from "react-native";
 
 import { RootState } from "../../store";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { NavigationProps } from "../../utils/types";
 
 import { sendMsg } from "../../socket";
@@ -31,12 +31,15 @@ import PressableWithStyle from "../../components/PressableWithStyle";
 
 import Content from "./Content/Content";
 import ImageViewer from "react-native-image-zoom-viewer";
+import { ChatType, updateChatByOne } from "../../store/userSlice";
 interface RouteParams {
   friendId: string;
 }
 
 function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
   const { friendId }: RouteParams = route.params;
+
+  const dispatch = useDispatch();
 
   // 对方的信息
   const friendInfo = useSelector((state: RootState) => {
@@ -61,9 +64,23 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
     });
   }, [friendInfo, navigation]);
 
-  // 发送
+  // 发送文字
   const handleSend = () => {
     if (text.length > 0) {
+      // 暂存
+      dispatch(
+        updateChatByOne({
+          friendId: friendId,
+          chat: {
+            time: String(Date.now()),
+            userid: user.id,
+            content: text,
+            type: "text",
+            loading: true,
+          },
+        })
+      );
+
       // 发送
       sendMsg({
         to: friendId,
@@ -86,7 +103,7 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
   // 有新消息时滚动
   useEffect(() => {
     scrollViewRef.current?.scrollToEnd({ animated: true });
-  }, [user]);
+  }, [chat]);
 
   // 打开相册
   const openImageLibrary = async () => {
@@ -100,8 +117,22 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
 
     if (!result.canceled) {
       // 拿到pick的图片
-      console.log(result.assets[0].type);
+      // console.log(result.assets[0].type);
       const base64URI = "data:image/png;base64," + result.assets[0].base64;
+
+      // 暂存
+      dispatch(
+        updateChatByOne({
+          friendId: friendId,
+          chat: {
+            time: String(Date.now()),
+            userid: user.id,
+            content: base64URI,
+            type: "image",
+            loading: true,
+          },
+        })
+      );
 
       sendMsg({
         to: friendId,
@@ -137,9 +168,22 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
     setZoom(true);
   }, []);
 
+  //
+
   return (
     <View style={styles.container}>
-      <Content ZoomImage={ZoomImage} friendId={friendId} ref={scrollViewRef} />
+      <View
+        style={[{ flex: 1 }]}
+        onLayout={(e) => {
+          // console.log("view", e.nativeEvent.layout);
+        }}
+      >
+        <Content
+          ZoomImage={ZoomImage}
+          friendId={friendId}
+          ref={scrollViewRef}
+        />
+      </View>
 
       <Modal visible={zoom} transparent={true}>
         <ImageViewer
@@ -158,6 +202,7 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
           ref={inputRef}
           style={styles.inputBox}
           placeholder=""
+          multiline={true}
           onChangeText={(newText) => setText(newText)}
           defaultValue={text}
           onFocus={() => {
@@ -165,7 +210,12 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
             console.log("scrollToEnd ");
             scrollViewRef.current?.scrollToEnd({ animated: true });
           }}
-          onSubmitEditing={handleSend}
+          onSubmitEditing={() => {
+            setText((text) => {
+              return text + `\n`;
+            });
+          }}
+          onBlur={() => {}}
         />
         <Pressable>
           <Image style={styles.rightBtn} source={faceIcon} />
@@ -174,11 +224,12 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
           <Pressable
             onPress={() => {
               inputRef.current.blur();
-              console.log("scrollToEnd ");
-              scrollViewRef.current?.scrollToEnd({ animated: true });
+
               setTimeout(() => {
+                console.log("scrollToEnd ");
+                scrollViewRef.current?.scrollToEnd({ animated: true });
                 setShowMore((more) => !more);
-              }, 50);
+              }, 200);
             }}
           >
             <Image style={styles.rightBtn} source={moreIcon} />
@@ -221,6 +272,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
+
   scrollview: {
     marginHorizontal: 0,
     width: window.width,
@@ -247,39 +299,44 @@ const styles = StyleSheet.create({
   btmBar: {
     width: window.width,
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-end",
     justifyContent: "flex-start",
     backgroundColor: "#f8f8f8",
     borderTopColor: "#c0c0c0",
     borderTopWidth: 0.5,
+
     // height: Math.max(window.width * 0.07 + 15, 45 + window.width * 0.02),
   },
   leftBtn: {
     width: window.width * 0.07,
     height: window.width * 0.07,
-    margin: 0,
+    margin: window.width * 0.03,
     marginLeft: window.width * 0.02,
     marginRight: 0,
   },
   rightBtn: {
     width: window.width * 0.07,
     height: window.width * 0.07,
+    margin: window.width * 0.03,
     marginRight: window.width * 0.02,
     marginLeft: 0,
   },
   inputBox: {
-    height: 38,
+    minHeight: window.width * 0.09,
+    maxHeight: window.width * 0.09 * 3,
     flex: 1,
     backgroundColor: "white",
     margin: window.width * 0.02,
-    padding: 0,
+    padding: window.width * 0.01,
     paddingLeft: 8,
     borderRadius: 4,
+    fontSize: 17,
   },
   sendBtn: {
     backgroundColor: "green",
     width: window.width * 0.12,
     height: window.width * 0.07,
+    margin: window.width * 0.03,
     marginRight: window.width * 0.02,
     justifyContent: "center",
     alignItems: "center",
@@ -287,9 +344,11 @@ const styles = StyleSheet.create({
   },
   sendText: {
     color: "white",
+    fontSize: 15,
   },
   moreBox: {
     height: window.height * 0.352,
+    // flex: 1,
     width: window.width,
     justifyContent: "flex-start",
     alignItems: "flex-start",

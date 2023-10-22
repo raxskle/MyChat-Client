@@ -38,7 +38,13 @@ const Content = forwardRef<ScrollView, ContentParams>(
       if (item.userid === user.id) {
         // 自己的消息
         if (item.type == "text") {
-          return <GreenChat chat={item} avator={user.avator} />;
+          return (
+            <GreenChat
+              chat={item}
+              avator={user.avator}
+              loading={item.loading}
+            />
+          );
         } else {
           return (
             <ImageChat
@@ -46,6 +52,7 @@ const Content = forwardRef<ScrollView, ContentParams>(
               chat={item}
               avator={user.avator}
               isUser={true}
+              loading={item.loading}
             />
           );
         }
@@ -65,16 +72,11 @@ const Content = forwardRef<ScrollView, ContentParams>(
       }
     };
 
-    console.log("render Content");
-
     return (
       <>
         <ScrollView
           ref={ref}
-          maintainVisibleContentPosition={{
-            minIndexForVisible: 1,
-            autoscrollToTopThreshold: 1,
-          }}
+          onScroll={(e) => {}}
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
             justifyContent: "center",
@@ -85,6 +87,7 @@ const Content = forwardRef<ScrollView, ContentParams>(
           <Text
             style={styles.helloText}
           >{`你已添加了${friendInfo?.name}，现在可以开始聊天了！`}</Text>
+          {/*  chatList */}
           {chat.map((item, index) => {
             return (
               <View style={styles.singleChatItem} key={Math.random()}>
@@ -99,6 +102,7 @@ const Content = forwardRef<ScrollView, ContentParams>(
               </View>
             );
           })}
+
           <View style={styles.gap} />
         </ScrollView>
       </>
@@ -108,9 +112,8 @@ const Content = forwardRef<ScrollView, ContentParams>(
 
 const styles = StyleSheet.create({
   scrollview: {
-    marginHorizontal: 0,
+    // marginHorizontal: 0,
     width: window.width,
-
     backgroundColor: "#f1f1f1",
   },
   helloText: {

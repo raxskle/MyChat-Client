@@ -15,6 +15,7 @@ interface ImageChatProps {
   isUser: boolean;
   onPress: any;
   name?: string;
+  loading?: boolean;
 }
 
 interface ImageSize {
@@ -52,6 +53,7 @@ function ImageChat({
   isUser,
   onPress,
   name,
+  loading,
 }: ImageChatProps): JSX.Element {
   const [size, setSize] = useState<ImageSize>();
 
@@ -61,11 +63,25 @@ function ImageChat({
     });
   }, []);
 
+  const [delayLoading, setDelayLoading] = useState(false);
+  // 当loading发送超过500ms，则显示loading图标
+  if (loading) {
+    setTimeout(() => {
+      setDelayLoading(true);
+    }, 500);
+  }
+
   return (
     <View style={[styles.chat, isUser ? styles.UserChat : styles.FriendChat]}>
       <View style={styles.content}>
         {name && <Text style={styles.name}>{name}</Text>}
         <View style={styles.bubble}>
+          {isUser && delayLoading && (
+            <Image
+              source={require("../../../assets/Loading.png")}
+              style={styles.circle}
+            />
+          )}
           <Pressable onPress={onPress}>
             <Image
               style={[styles.image, resize(size)]}
@@ -95,12 +111,19 @@ const styles = StyleSheet.create({
   bubble: {
     overflow: "hidden",
     borderRadius: 6,
+    flexDirection: "row",
   },
   image: {
     maxWidth: window.width * 0.4,
     maxHeight: window.width * 0.5,
     width: "auto",
     height: "auto",
+  },
+  circle: {
+    marginTop: 10,
+    marginRight: 5,
+    width: 20,
+    height: 20,
   },
   avator: {
     width: 40,
