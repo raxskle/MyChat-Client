@@ -18,7 +18,7 @@
 
 腾讯微信客户端开发菁英班结课作业，迷你即时聊天应用的客户端。
 
-使用跨端技术进行安卓移动端开发。已由 React Native CLI 迁移至 expo。
+使用跨端技术进行安卓移动端开发。开发环境原本由 React Native CLI 迁移至 expo。
 
 ## Technologies
 
@@ -31,27 +31,23 @@
 
 ## todo
 
-- [已完成] 发送图片
+- [已完成] 发送图片等类型消息
 - [已完成] 自定义用户信息
 - [已完成] 群组聊天 : 创建群聊，服务端，客户端
-- [已完成] socket 新增好友和群组，通知对方
+- [已完成] 新增好友和群组，使用 websocket 通知对方在线的 client
 - [已完成] 聊天信息送达确认，显示发送 pending 状态
-
-- [已完成] ChatList 按时间排序
+- 已读和未读消息状态区分
 
 ## Features
 
 - 基本还原微信 app 样式
-- 支持在线即时通信，基于 Socket.io 库实现
+- 支持多人在线即时通信，基于 Socket.io 库实现
 - 支持离线保存信息，登陆后可查看离线期间收到的消息
-- 简易支持用户注册登陆
-- 可自定义用户名与头像等用户信息
+- 简易支持用户注册登陆，可自定义用户名与头像等用户信息
 
 ## How To Run
 
-如果想运行本项目，首先确保已安装 Node.js(>=18)，JDK，Android Studio，并确保配置可以运行安卓原生项目，创建 Android 虚拟设备或真机调试。
-
-按照文档 [React Native](https://reactnative.dev/docs/environment-setup) 安装 React Native CLI。
+如果想运行本项目，可以参考 [文档](https://reactnative.dev/docs/environment-setup?guide=quickstart) 配置
 
 ```
 # Clone this project
@@ -63,12 +59,16 @@ $ cd MyChat-Client
 # Install dependencies
 $ npm install
 
-# Run the Metro
-$ npm start
+# Run the Expo
+$ npx expo start
 
-Create another command line terminal
+1. Install the [Expo Go](https://expo.dev/client) app on your Android phone.
 
-# Start your application
+2. connect to the same wireless network as your computer.
+
+3. scan the QR code and run your app.
+
+# If you want to start your application with virtual device
 $ npm run android
 
 That's it!
