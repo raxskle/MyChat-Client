@@ -95,6 +95,7 @@ export const sendMsg = (data: Msg) => {
   console.log("socket:sendMsg:", data);
 };
 
+// 发送群聊消息
 interface GroupMsg {
   groupId: string;
   speaker: string;
@@ -105,4 +106,15 @@ interface GroupMsg {
 export const sendGroupMsg = (data: GroupMsg) => {
   socket.emit("sendGroupMsg", data);
   console.log("socket:sendGroupMsg:", data);
+};
+
+export interface CheckMsgType {
+  type: "chats" | "groupChats";
+  userId: string;
+  targetId: string;
+}
+// 已读所有消息 user 或 group
+export const checkAllMsg = (data: CheckMsgType) => {
+  socket.emit("checkAllChat", data);
+  console.log("socket:checkAllChat:", data);
 };

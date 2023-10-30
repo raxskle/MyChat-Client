@@ -15,10 +15,10 @@ import {
 import { Dimensions } from "react-native";
 
 import { RootState } from "../../store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavigationProps } from "../../utils/types";
 
-import { sendGroupMsg, sendMsg } from "../../socket";
+import { CheckMsgType, checkAllMsg, sendGroupMsg, sendMsg } from "../../socket";
 
 const window = Dimensions.get("window");
 
@@ -33,6 +33,7 @@ import GroupChatContent from "./GroupChatContent/GroupChatContent";
 import ImageViewer from "react-native-image-zoom-viewer";
 import { getFriendInfo, getGroupInfo } from "../../http";
 import { FriendInfo } from "../../store/friendSlice";
+import { checkMsgLocal } from "../../store/userSlice";
 interface RouteParams {
   groupId: string;
 }
@@ -59,6 +60,8 @@ function GroupChatPage({ route, navigation }: NavigationProps): JSX.Element {
   if (user.id === "" || !groupChats || !groupInfo) {
     navigation.navigate("Login");
   }
+
+  const dispatch = useDispatch();
 
   // 输入的信息
   const [text, setText] = useState("");
@@ -151,6 +154,20 @@ function GroupChatPage({ route, navigation }: NavigationProps): JSX.Element {
     setIndex(index);
     setZoom(true);
   }, []);
+
+  useEffect(() => {
+    // here 打开页面才会执行
+    // 已读所有信息
+
+    const data: CheckMsgType = {
+      type: "groupChats",
+      userId: user.id,
+      targetId: groupId,
+    };
+
+    checkAllMsg(data);
+    dispatch(checkMsgLocal({ data: data }));
+  }, [user.id, groupId]);
 
   return (
     <View style={styles.container}>

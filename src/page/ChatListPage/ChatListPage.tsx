@@ -13,6 +13,8 @@ const window = Dimensions.get("window");
 function ChatListPage({ navigation }: NavigationProps): JSX.Element {
   const chats = useSelector((state: RootState) => state.user.user.chats) || {};
 
+  const user = useSelector((state: RootState) => state.user.user);
+
   const friendList = useSelector((state: RootState) => state.friend.data);
 
   const groupChats =
@@ -28,6 +30,11 @@ function ChatListPage({ navigation }: NavigationProps): JSX.Element {
       })
       .map((id) => {
         const info = friendList.find((item) => item.id === id);
+
+        const uncheckedCount = chats[id].filter(
+          (chat) => chat.checked === false && chat.userid !== user.id
+        ).length;
+
         return {
           time: chats[id][chats[id].length - 1]?.time || "0",
           element: (
@@ -38,6 +45,7 @@ function ChatListPage({ navigation }: NavigationProps): JSX.Element {
               friendId={id}
               name={info.name}
               avator={{ uri: info.avator }}
+              uncheckedNum={uncheckedCount}
             />
           ),
         };
@@ -45,6 +53,9 @@ function ChatListPage({ navigation }: NavigationProps): JSX.Element {
 
     const groupChatList = Object.keys(groupChats).map((id) => {
       const info = groups.find((item) => item.id === id);
+      const uncheckedCount = groupChats[id].filter(
+        (chat) => chat.checked === false && chat.userid !== user.id
+      ).length;
       return {
         time: groupChats[id][groupChats[id].length - 1]?.time || "0",
         element: (
@@ -55,6 +66,7 @@ function ChatListPage({ navigation }: NavigationProps): JSX.Element {
             groupId={info.id}
             name={info.name}
             avator={require("../../assets/Icon.png")}
+            uncheckedNum={uncheckedCount}
           />
         ),
       };

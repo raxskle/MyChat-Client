@@ -5,6 +5,7 @@
 // 当修改数据时（比如增加聊天记录、修改用户信息、添加好友等），携带修改数据向服务端请求，响应修改后user信息进行更新user
 // 除websocket以外的请求，所有数据更新跟随请求后的响应，不需要主动单独请求数据保持最新
 import { type PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { CheckMsgType } from "../socket";
 
 export interface ChatType {
   time: string;
@@ -12,6 +13,7 @@ export interface ChatType {
   content: string;
   type: "text" | "image";
   loading?: boolean; // 仅在本地发送消息等待receiveMsg时为true
+  checked: boolean;
 }
 
 export interface User {
@@ -135,6 +137,21 @@ export const userSlice = createSlice({
         state.user.groupChats = { [groupId]: [chat] };
       }
     },
+    // 本地已读
+    checkMsgLocal: (
+      state,
+      action: PayloadAction<{
+        data: CheckMsgType;
+      }>
+    ) => {
+      const { type, targetId } = action.payload.data;
+      state.user[type][targetId] = state.user[type][targetId].map((chat) => {
+        return {
+          ...chat,
+          checked: true,
+        };
+      });
+    },
   },
 });
 
@@ -148,5 +165,6 @@ export const {
   updateGroupChatByOne,
   updateFriend,
   addOneFriend,
+  checkMsgLocal,
 } = userSlice.actions;
 export default userSlice.reducer;

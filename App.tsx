@@ -46,6 +46,7 @@ import {
 import GroupPage from "./src/page/GroupListPage/GroupListPage";
 import TeamUpGroupPage from "./src/page/TeamUpGroupPage/TeamUpGroupPage";
 import GroupChatPage from "./src/page/GroupChatPage/GroupChatPage";
+import SearchPage from "./src/page/SearchPage/SearchPage";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -69,7 +70,13 @@ const HeaderButton = () => {
 
   return (
     <View style={styles.headerRight}>
-      <Pressable onPress={() => console.log("This is a button!")}>
+      <Pressable
+        onPress={() => {
+          if (sharedNavigation) {
+            sharedNavigation.navigate("SearchPage");
+          }
+        }}
+      >
         <Image
           style={styles.headerBtn}
           source={require("./src/assets/SearchIcon.png")}
@@ -421,6 +428,17 @@ function App(): JSX.Element {
                 title: "群聊",
                 headerRight: undefined,
                 headerLeft: undefined,
+              }}
+            />
+
+            <Stack.Screen
+              name="SearchPage"
+              component={SearchPage}
+              options={{
+                title: "搜索",
+                headerRight: undefined,
+                headerLeft: undefined,
+                headerTransparent: true,
               }}
             />
           </Stack.Navigator>

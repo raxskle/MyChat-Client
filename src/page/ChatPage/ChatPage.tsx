@@ -18,7 +18,7 @@ import { RootState } from "../../store";
 import { useSelector, useDispatch } from "react-redux";
 import { NavigationProps } from "../../utils/types";
 
-import { sendMsg } from "../../socket";
+import { CheckMsgType, checkAllMsg, sendMsg } from "../../socket";
 
 const window = Dimensions.get("window");
 
@@ -31,7 +31,11 @@ import PressableWithStyle from "../../components/PressableWithStyle";
 
 import Content from "./Content/Content";
 import ImageViewer from "react-native-image-zoom-viewer";
-import { ChatType, updateChatByOne } from "../../store/userSlice";
+import {
+  ChatType,
+  checkMsgLocal,
+  updateChatByOne,
+} from "../../store/userSlice";
 interface RouteParams {
   friendId: string;
 }
@@ -77,6 +81,7 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
             content: text,
             type: "text",
             loading: true,
+            checked: true,
           },
         })
       );
@@ -130,6 +135,7 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
             content: base64URI,
             type: "image",
             loading: true,
+            checked: true,
           },
         })
       );
@@ -168,7 +174,18 @@ function ChatPage({ route, navigation }: NavigationProps): JSX.Element {
     setZoom(true);
   }, []);
 
-  //
+  useEffect(() => {
+    // here 打开页面才会执行
+    // 已读所有信息
+
+    const data: CheckMsgType = {
+      type: "chats",
+      userId: user.id,
+      targetId: friendId,
+    };
+    checkAllMsg(data);
+    dispatch(checkMsgLocal({ data: data }));
+  }, [user.id, friendId]);
 
   return (
     <View style={styles.container}>

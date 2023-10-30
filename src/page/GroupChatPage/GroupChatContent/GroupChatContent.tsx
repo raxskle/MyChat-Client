@@ -63,7 +63,7 @@ const GroupChatContent = forwardRef<ScrollView, ContentParams>(
 
         friendInfo = friendInfo || {
           avator: user.avator,
-          name: user.name,
+          name: " ",
           id: item.userid,
         };
 

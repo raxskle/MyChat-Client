@@ -17,58 +17,17 @@ import { formatTime } from "../../../utils/formatTime";
 import PressableWithStyle from "../../../components/PressableWithStyle";
 const window = Dimensions.get("window");
 
-interface ChatItemProps extends NavigationProps {
-  chat: ChatType[];
-  friendId?: string;
+interface RecordItemProps {
   name: string;
   avator: ImageSourcePropType;
-  groupId?: string;
-  uncheckedNum: number;
+  count: number;
 }
 
-function ChatItem({
-  navigation,
-  friendId,
-  groupId,
-  chat,
-  name,
-  avator,
-  uncheckedNum,
-}: ChatItemProps): JSX.Element {
-  const lastMsg = chat.length > 0 ? chat[chat.length - 1] : undefined;
-
-  const renderLastMsg = (lastMsg: ChatType) => {
-    if (!lastMsg) {
-      return friendId
-        ? `你已添加了 ${name}，现在可以开始聊天了!`
-        : `你已加入了群聊 ${name}，现在可以开始聊天了!`;
-    }
-
-    if (lastMsg.type === "text") {
-      return lastMsg.content.replaceAll("\n", "  ");
-    } else if (lastMsg.type === "image") {
-      return "[图片]";
-    }
-  };
-
+function RecordItem({ name, avator, count }: RecordItemProps): JSX.Element {
   return (
-    <PressableWithStyle
-      onPress={() => {
-        if (friendId) {
-          // 私聊
-          navigation.navigate("Chat", { friendId });
-        } else if (groupId) {
-          navigation.navigate("GroupChat", { groupId });
-        }
-      }}
-    >
+    <PressableWithStyle>
       <View style={styles.item}>
-        <View>
-          <Image style={styles.avator} source={avator} />
-          {uncheckedNum > 0 && (
-            <Text style={styles.unchecked}> {uncheckedNum} </Text>
-          )}
-        </View>
+        <Image style={styles.avator} source={avator} />
 
         <View style={styles.main}>
           <View style={styles.data}>
@@ -76,12 +35,9 @@ function ChatItem({
               {name}
             </Text>
             <Text style={styles.msg} numberOfLines={1}>
-              {renderLastMsg(lastMsg)}
+              {`共${count}条相关聊天记录`}
             </Text>
           </View>
-          <Text style={styles.time} numberOfLines={1}>
-            {lastMsg ? formatTime(lastMsg?.time) : ""}
-          </Text>
         </View>
       </View>
     </PressableWithStyle>
@@ -148,4 +104,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChatItem;
+export default RecordItem;
