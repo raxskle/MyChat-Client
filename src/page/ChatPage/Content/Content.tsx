@@ -91,13 +91,19 @@ const Content = forwardRef<ScrollView, ContentParams>(
           {chat.map((item, index) => {
             return (
               <View style={styles.singleChatItem} key={Math.random()}>
-                {index === 0 ||
-                  (Number(item.time) - Number(chat[index - 1].time) >
+                {index === 0 ? (
+                  <Text style={styles.chatTime}>
+                    {formatTime(item.time, "full")}
+                  </Text>
+                ) : (
+                  index > 0 &&
+                  Number(item.time) - Number(chat[index - 1].time) >
                     1000 * 60 * 10 && (
                     <Text style={styles.chatTime}>
                       {formatTime(item.time, "full")}
                     </Text>
-                  ))}
+                  )
+                )}
                 {settle(item)}
               </View>
             );

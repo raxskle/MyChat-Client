@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   },
   msg: {
     fontSize: 15,
-    color: "rgba(0, 0, 0, 0.4)",
+    color: "rgb(170,170,170)",
     maxWidth: window.width * 0.8,
     overflow: "hidden",
     flexWrap: "nowrap",
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     marginRight: 10,
     marginTop: 15,
-    color: "rgba(0, 0, 0, 0.4)",
+    color: "rgb(170,170,170)",
   },
 });
 
